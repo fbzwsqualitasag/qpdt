@@ -1,0 +1,458 @@
+---
+title: "Check for Cycles in Pedigrees"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Check for Cycles in Pedigrees}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr-opts, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(qpdt)
+```
+
+
+# Disclaimer
+From a graph theoretic point of view, a pedigree can be represented as a directed acyclic graph. The name already tells it, that the graph must not show any cycles. 
+
+
+# Terminology
+## Graph
+In general a __graph__ $G = (V, E)$ is defined by the two sets $V$ and $E$ where $V$ contains the set of vertices or nodes and $E$ contains the set of edges where each edge is formed by two verties. Two main categories of graphs exist. 
+
+1. undirected graphs: edges do not show any directions, hence the order of the two vertices forming an edge is not important.
+2. directed graphs: edges have a directions and with that the order of the vertices that define an edge is important.
+
+When graphs are shown as diagrams, edges of directed graphs are symbolised by arrows and edges of undirected graphs are just shown as ordinary lines. 
+
+In a directed graph, the number of edges which "point to" a given vertex, corresponds to the __in-degree__ of the respective vertex. A certain edge $E_j$ "points to" a vertex $V_i$, if vertex $V_i$ is the second element of edge $E_j$, hence $E_j = (*, V_i)$. Analogously, the number of edges which "point away" from a given vertex, defines the __out-degree__ of the vertex. If edge $E_j$ points away from vertex $V_i$, then $E_j = (V_i, *)$.
+
+Vertex $V_i$ is called a __root vertex__ (or root node), if the in-degree of $V_i$ is equal to $0$. Vertex $V_i$ is referred to as __terminal vertex__ if the out-degree of $V_i$ is equal to $0$.  
+
+
+## Pedigree
+Pedigrees can be represented by directed graphs. The nodes stand for the individuals in the pedigree and the edges show the relationship between parents and offspring. The direction is often chosen to go from parents to offspring. Further properties of a pedigree-graph are that 
+
+* the in-degree (number of arrows pointing to a certain vertex) is always two. 
+* a pedigree-graph cannot contain any cycles due to the time-lag of the parent generation to the offspring generations. 
+
+## Cycle
+A cycle in a directed graph is found when in a path of vertices along the directed edges, any vertice is visited more than once.
+
+```{r show-directed-graph, warning=FALSE, message=FALSE}
+library(Rgraphviz)
+dg_cyc <- new("graphNEL", nodes=as.character(1:6), edgemode="directed")
+dg_cyc <- addEdge("1", "2", dg_cyc, 1)
+dg_cyc <- addEdge("1", "3", dg_cyc, 1)
+dg_cyc <- addEdge("2", "3", dg_cyc, 1)
+dg_cyc <- addEdge("4", "1", dg_cyc, 1)
+dg_cyc <- addEdge("4", "5", dg_cyc, 1)
+dg_cyc <- addEdge("5", "6", dg_cyc, 1)
+dg_cyc <- addEdge("6", "4", dg_cyc, 1)
+plot(dg_cyc)
+```
+
+Starting at node $4$ and following the path along the directed edges leads to the following path
+
+$$4 \rightarrow 5 \rightarrow 6 \rightarrow 4.$$
+
+The above path visits the vertex $4$ twice and hence the above directed graph contains a cycle.
+
+Directed graphs that do not contain any cycles are called __directed acyclic graphs__ (DAG). This special class of directed acyclic graphs is of special interest because the representation of a pedigree in terms of graphs corresponds to a DAG. As a consequence of that any graph that represents a pedigree cannot contain any cycles and this property can be used as a consistency check for a pedigree.
+
+
+# Algorithm
+As explained in the previous section, any pedigree can be represented by a DAG. Hence, we can construct a directed graph based on a given pedigree and then we can check whether this graph contains any cycles. In order to perform this check, we need an algorithm that takes a directed graph as input and that outputs the result 'TRUE', if the directed graph that was used as input contains any cycles and 'FALSE' otherwise. Only pedigrees whose directed graph representations cause the algorithm to return the result 'FALSE' are valid pedigrees.
+
+The idea of an algorithm to find cycles in a directed graph is based on the concept of 'depth-first' traversal (DFT) of the graph. In a depth first traversal of a graph, the vertices are visited recursively along the parent-offspring relationship until a dead-end is hit with a vertex that does not have anymore offspring. Once a dead-end is hit, the traversal does a back-track to the parent with more offpsring that have not yet been visited. 
+
+A 'depth-first' traversal of the above shown example graph starting at vertex $1$ would lead to the following path
+
+$$1 \rightarrow 2 \rightarrow 3 \rightarrow 3$$
+
+
+# First Implementation
+The first implementation is done using three different sets of vertices. 
+
+1. white set: contains all vertices that have not been visited by a DFT
+2. grey set: vertices that have been visited by the current DFT starting at a given vertex
+3. black set: vertices that have been visited by previous rounds of DFT
+
+The implementation consists of the following steps
+
+* Step 1: Initialisation by moving all vertices into the white set
+* Step 2: Select any of the vertices from the white set and move it to the grey set.
+* Step 3: Run a DFT from the selected vertex
+* Step 4: In the forward phase of the DFT move the visited vertices to the grey set, if a vertex that should be added to the grey set is already in the grey set, then we have found a cycle and we return the answer 'YES'.
+* Step 5: In the backtracking phase of the DFT, the vertices are moved from the white set to the black set.
+* Step 6: Go back to Step 2 and select a different vertex, return 'FALSE' if the white set is empty
+
+
+## R-code
+In this subsection, we try to give some R-code to solve the problem of finding cycles in directed graphs for the above example. Before starting with the steps of the implementation, we have to define the graph. In this case, we use an adjacency matrix $A$.
+
+```{r graph-adjacency-matrix}
+# number of vertices in the graph
+nr_vert <- 6
+# adjacency matrix
+mat_A <- matrix(0, nrow = nr_vert, ncol = nr_vert)
+mat_A[1, 2] <- 1
+mat_A[1, 3] <- 1
+mat_A[2, 3] <- 1
+mat_A[4, 1] <- 1
+mat_A[4, 5] <- 1
+mat_A[5, 6] <- 1
+mat_A[6, 4] <- 1
+mat_A
+```
+
+
+We start with step 1, the initialisation of the three sets
+
+```{r init-wgb-set}
+# initialisation
+(l_set <- list(white = 1:6,
+              grey = NULL,
+              black = NULL))
+```
+
+In step 2, a random vertex, e.g. vertex $1$ is selected and moved from the white set to the grey set. Because the move of vertices from the white set to the grey set is a task that has to be done repeatedly, we are creating a function for that. 
+
+```{r move-wg-fun}
+move_white_grey <- function(pn_cur_vertex, pl_set){
+  # if pn_cur_vertex is already in the grey set, then we found a cycle
+  if (is.element(pn_cur_vertex, pl_set$grey))
+    stop(" * Found a cycle in the graph with vertex: ", pn_cur_vertex)
+  # init result set
+  l_result_set <- pl_set
+  # check whether current vertex is in the white set
+  if (!is.element(pn_cur_vertex, l_result_set$white))
+    stop(" *** ERROR: CANNOT FIND vertex: ", pn_cur_vertex, " in white set: ", paste0(l_result_set$white, collapse = ','))
+  # remove pn_cur_vertex from white set
+  l_result_set$white <- setdiff(l_result_set$white, pn_cur_vertex)
+  # add pn_cur_vertex to grey set
+  l_result_set$grey <- union(l_result_set$grey, pn_cur_vertex)
+  return(l_result_set)
+}
+```
+
+The move can be done with
+
+```{r step1-dft}
+cur_vertex <- 1
+(l_set <- move_white_grey(pn_cur_vertex = cur_vertex, pl_set = l_set))
+```
+
+Now we have to explore all neighbors of vertex $`r cur_vertex`$. The neighbors are found in the first row of the adjacency matrix $A$
+
+```{r determine-neighbor-vertices}
+which(mat_A[cur_vertex,] == 1)
+```
+
+The neighbors are found in the columns where the matrix $A$ has an entry of $1$. The neighbors of a given vertex can be obtained with the following function
+
+```{r get-neighbor-vertices-fun}
+get_neighbors <- function(pn_cur_vertex, pmat_adj){
+  # check whether the index of the current vertex is in adj matrix
+  if (pn_cur_vertex > nrow(pmat_adj))
+    stop(" *** ERROR: CANNOT FIND current vertex: ", pn_cur_vertex)
+  # get neighbors
+  return(which(pmat_adj[pn_cur_vertex, ] == 1))
+}
+```
+
+The above function to return neighbors of all vertices can be tested with
+
+```{r}
+lapply(1:nr_vert, get_neighbors, mat_A)
+```
+
+Now we assign the first neighbor of $`r cur_vertex`$ as the current vertex which is
+
+```{r get-neighbor-vertices-call}
+(vec_neighbors_v1 <- get_neighbors(pn_cur_vertex = cur_vertex, pmat_adj = mat_A))
+```
+
+Hence the new current vertex is 
+
+```{r first-neighbor-as-current-vertex}
+(cur_vertex <- vec_neighbors_v1[1])
+```
+
+We have to check whether the current vertex $`r cur_vertex`$ is in the black set or in the grey set
+
+```{r check-neighbor-in-set}
+(b_check <- is.element(cur_vertex, l_set$black) || is.element(cur_vertex, l_set$grey))
+```
+
+which is `r b_check`. Hence we can add the current vertex to the grey set. 
+
+```{r move-neighbor-to-grey}
+(l_set <- move_white_grey(pn_cur_vertex = cur_vertex, pl_set = l_set))
+```
+
+Since we are doing a DFT, we have to first check for neighbors of the current vertex $`r cur_vertex`$. The neighbors are obtained by
+
+```{r get-neighbor-of-neighbor}
+(vec_neighbors_v2 <- get_neighbors(pn_cur_vertex = cur_vertex, pmat_adj = mat_A))
+```
+
+The current vertex is assigned to 
+
+```{r neighbor-of-neighbor-as-current}
+(cur_vertex <- vec_neighbors_v2[1])
+```
+
+Because the current vertex $`r cur_vertex`$ is neither in the grey set nor in the black set, it is added to the grey set, 
+
+```{r neighbor-of-neighbor-from-white-to-grey}
+(l_set <- move_white_grey(pn_cur_vertex = cur_vertex, pl_set = l_set))
+```
+
+Because the current vertex $`r cur_vertex`$ does not have any neighbors, all vertices in the grey set are moved to the black set. 
+
+```{r move-grey-black-fun}
+move_grey_black <- function(pn_current_vertex, pl_set){
+  # check whether pn_current_vertex is already in the black set
+  if (is.element(pn_current_vertex, pl_set$black))
+    stop(" *** ERROR: FOUND vertex: ", pn_current_vertex, " in black set: ", paste0(pl_set$black, collapse = ', '))
+  l_result_set <- pl_set
+  l_result_set$grey <- setdiff(l_result_set$grey, pn_current_vertex)
+  l_result_set$black <- union( l_result_set$black, pn_current_vertex)
+  return(l_result_set)
+}
+```
+
+Applying the function for all elements in the grey set leads to
+
+```{r move-grey-to-visited}
+vec_visited_vertex <- l_set$grey
+for (v in vec_visited_vertex){
+   l_set <- move_grey_black(pn_current_vertex = v, pl_set = l_set)
+}
+l_set
+```
+
+At this point, the DFT is returning to the second neighbor of vertex $1$ which corresponds to `r vec_neighbors_v1[2]`. Since this neighbor is already in the black set, we do not have to check `r vec_neighbors_v1[2]` again.
+
+The next step is to go back to the remaining elements in the white set. The remaining steps are done using the following set of functions.
+
+
+## DFT Functions
+The following functions can be used to automate the checks and the DFT.
+
+```{r has_cycle-fun}
+has_cycle <- function(pmat_adj){
+  nr_vertex <- nrow(pmat_adj)
+  # check whether pmat_adj is quadratic
+  if (ncol(pmat_adj) != nr_vertex)
+    stop(" *** ERROR: pmat_adj is not a valid adjacency matrix")
+  # define the sets
+  l_set_wgb <- list(white = 1:nr_vertex,
+                    grey  = NULL,
+                    black = NULL)
+  # loop over vertices in the white set
+  vec_non_visited <- l_set_wgb$white
+  for (v in vec_non_visited){
+    if (dfs(pn_current_vertex = v, pl_set = l_set_wgb, pmat_adj = pmat_adj))
+      return(TRUE)
+  }
+  return(FALSE)
+}
+```
+
+The recursive DFT is done in the function `dfs()` 
+
+```{r dfs-fun}
+dfs <- function(pn_current_vertex, pl_set,  pmat_adj){
+  # move the current vertex to the grey set
+  l_set <- move_white_grey(pn_cur_vertex = pn_current_vertex, pl_set = pl_set)
+  # determine neighbors of the current vertex
+  vec_neighbors <- get_neighbors(pn_cur_vertex = pn_current_vertex, pmat_adj = pmat_adj)
+  # loop over neighbors
+  for (idx in seq_along(vec_neighbors)){
+    cur_neighbor <- vec_neighbors[idx]
+    # if the current neighbor is in the black set, continue
+    if (is.element(cur_neighbor, l_set$black))
+      next
+    # if the neighbor is in the grey set, cylce is found
+    if (is.element(cur_neighbor, l_set$grey))
+      return(TRUE)
+    # continue DFT with neighbor
+    if (dfs(pn_current_vertex = cur_neighbor, pl_set = l_set, pmat_adj = pmat_adj))
+      return(TRUE)
+  }
+  # move the current vertex from grey to black
+  l_set <- move_grey_black(pn_current_vertex = pn_current_vertex, pl_set = l_set)
+  return(FALSE)
+}
+```
+
+The above function can be tested with the following call
+
+```{r has_cycle-call-cycled-graph}
+has_cycle(pmat_adj = mat_A)
+```
+
+This result shows that the directed graph represented by the adjacency matrix `mat_A` contains a cycle. If the edge between vertices $6$ and $4$ is removed, then we get a directed acyclic graph. 
+
+```{r create-dag-adjacency-matrix}
+mat_A_dag <- mat_A
+mat_A_dag[6,4] <- 0
+mat_A_dag
+```
+
+Running the check for the DAG given by `mat_A_dag` results in
+
+```{r has_cycle-call-dag}
+has_cycle(pmat_adj = mat_A_dag)
+```
+
+
+# Optimisation
+As shown above, the algorithm was able to find cycles in the two example graphs. There are a number of improvements that can be made to the solution proposed so far.
+
+1. Show the vertices that form the cycle. Besides the result indicating whether a directed graph contains any cycles or not, the list of vertices which form the cycle are of interest to the user.
+2. Use a node-list instead of an adjacency matrix as input
+3. Add only non-root and non-terminal vertices to the white set instead of adding all vertices to the white set
+
+
+## Show Vertices in Cycle
+In a first approach we can modify the function `dfs()` to output the vertices in the cycle. 
+
+```{r dfs-fun-show-cycle} 
+dfs <- function(pn_current_vertex, pl_set,  pmat_adj){
+  # move the current vertex to the grey set
+  l_set <- move_white_grey(pn_cur_vertex = pn_current_vertex, pl_set = pl_set)
+  # determine neighbors of the current vertex
+  vec_neighbors <- get_neighbors(pn_cur_vertex = pn_current_vertex, pmat_adj = pmat_adj)
+  # loop over neighbors
+  for (idx in seq_along(vec_neighbors)){
+    cur_neighbor <- vec_neighbors[idx]
+    # if the current neighbor is in the black set, continue
+    if (is.element(cur_neighbor, l_set$black))
+      next
+    # if the neighbor is in the grey set, cylce is found
+    if (is.element(cur_neighbor, l_set$grey)){
+      cat(" * Cycle - current node: ", cur_neighbor, " - grey set: ", paste0(l_set$grey, collapse = ', '), "\n")
+      return(TRUE) 
+    }
+    # continue DFT with neighbor
+    if (dfs(pn_current_vertex = cur_neighbor, pl_set = l_set, pmat_adj = pmat_adj))
+      return(TRUE)
+  }
+  # move the current vertex from grey to black
+  l_set <- move_grey_black(pn_current_vertex = pn_current_vertex, pl_set = l_set)
+  return(FALSE)
+}
+```
+
+Calling the check function for the graph containing the cycle results in
+
+```{r has_cycle-modified-dfs}
+has_cycle(pmat_adj = mat_A)
+```
+
+This shows the vertices that are in the cycle. The above shown improvement does not give the path of the cycle. 
+
+
+## Node List
+The node list shows for each vertex the parent vertices. This is an important representation of a graph, because that is how pedigrees are usually specified. A node list that represents a pedigree has three columns. The first column is used for the ID of the vertex, the second column is used for the first parent vertex (father) and the second column contains the second parent vertex (mother). This change has an impact on the way how neighbors are determined. 
+
+Our example graph from above can be specified as a pedigree-node-list given by the following table. 
+
+```{r node-list-table}
+tbl_node_list <- tibble::tibble(ID = c(1:6),
+                                Father = c(4,1,1,6,4,5),
+                                Mother = c(NA,NA,2,NA,NA,NA))
+knitr::kable(tbl_node_list)
+```
+
+The function to find the neighbors based on the node list is given below. 
+
+```{r neighbor-node-list-fun}
+get_neighbors_node_list <- function(pn_current_vertex, ptbl_node_list) {
+  # neighbor vertices can be found in the ID-column of ptbl_node_list where 
+  #  pn_current_vertex is either in the Father column or the Mother column
+  if (is.element(pn_current_vertex, ptbl_node_list$Father)) {
+    tbl_result_neighbor <- dplyr::filter(ptbl_node_list, Father == pn_current_vertex)
+    vec_result_neighbor <- tbl_result_neighbor$ID
+  } else if (is.element(pn_current_vertex, ptbl_node_list$Mother)) {
+    tbl_result_neighbor <- dplyr::filter(ptbl_node_list, Mother == pn_current_vertex)
+    vec_result_neighbor <- tbl_result_neighbor$ID
+  } else {
+    vec_result_neighbor <- NULL
+  }
+  return(vec_result_neighbor)
+}
+```
+
+The function is tested with
+
+```{r test-neighbor-node-list}
+lapply(1:nr_vert, get_neighbors_node_list, tbl_node_list)
+```
+
+
+## Reduced White Set
+Because root-vertices and terminal vertices cannot be elements of a cycle. Any vertex that is an element in a cycle must have at least one edge that points to the vertex and one edge that points away from the vertex, otherwise the cycle would be broken at this vertex. Hence root-vertices and terminal vertices need not be included in the white set. This reduces the number of vertices that must be checked in the DFT-algorithm. 
+
+
+# Implementation as R6 Class
+The check for cycles can be implemented using the R6 class-system. The R6 class which does the check is called `PedigreeCycleCheck`. This class contains the method `has_cycle()` which does the check as shown in the function `has_cycle()` above. The advantage of this solution is that information about the pedigree which might be large needs to be stored only once and does not have to be passed as function argument.
+
+The check for the pedigree with a cycle is done as shown below. 
+
+```{r r6-cycle-check}
+pcfc <- PedigreeCycleCheck$new()
+pcfc$set_tbl_pedigree(ptbl_pedigree = tbl_node_list)
+pcfc$set_n_ani_col(pn_ani_col = 1)
+pcfc$set_n_sire_col(pn_sire_col = 2)
+pcfc$set_n_dam_col(pn_dam_col = 3)
+pcfc$has_cycle()
+```
+
+The result of the method `has_cycle()` returns either true or false. If we want to know the vertices that occur in a cycle, they can be obtained via the following statements
+
+```{r}
+pcfc$set_b_report_cycle(TRUE)
+pcfc$has_cycle()
+pcfc$get_tbl_cycle()
+```
+
+
+Doing the same check with a pedigree without loop is done as follows.
+
+```{r r6-check-no-cycle}
+tbl_ped_no_cycle <- tibble::tibble(ID = c(1:6),
+                                   Father = c(4,1,1,NA,4,5),
+                                   Mother = c(NA,NA,2,NA,NA,NA))
+pcnc <- PedigreeCycleCheck$new()
+pcnc$set_tbl_pedigree(ptbl_pedigree = tbl_ped_no_cycle)
+pcnc$set_n_ani_col(pn_ani_col = 1)
+pcnc$set_n_sire_col(pn_sire_col = 2)
+pcnc$set_n_dam_col(pn_dam_col = 3)
+pcnc$has_cycle()
+```
+
+
+## Wrapper Function for Cycle Check
+Working with the R6 objects is not easy. To simplify, a wrapper function is available. This is used as shown below.
+
+```{r}
+check_cycle_pedigree(ptbl_pedigree = tbl_node_list, pb_report_cycle = TRUE)
+```
+
+The wrapper function can also be used with a pedigree that is read from an input file.
+
+```{r, message=FALSE}
+check_cycle_pedigree(ps_pedig_path = system.file('extdata','data_sample2.csv', package = 'qpdt'))
+```
+

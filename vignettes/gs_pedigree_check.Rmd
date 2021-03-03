@@ -1,0 +1,182 @@
+---
+title: "Checking Consistency of Animal Pedigrees"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Checking Pedigrees For PopReport}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, eval=TRUE}
+library(qpdt)
+```
+
+
+# Disclaimer
+Pedigrees that are analysed by the software system PopReport must fullfill certain properties and must be formatted according to certain rules. The proporties and the fullfillment of the rules are checked by this package. The checks that are implemented in this package are described in this vignette.
+
+
+# Checks and Diagnoses
+The checks of the pedigrees are based on the following points
+
+* number of records
+* number of unique IDs
+* number of animals with parents
+* empirical distribution of birthdates
+* empirical distribution of sexes
+* empirical distribution of postal codes
+
+
+# Uniqueness of Animal IDs
+Animal IDs are the primary keys of an individual. Hence these IDs must be unique. This uniqueness is tested with the following statement using the function `check_pedig_id()`. This function requires the path to an input pedigree as an argument. This package contains a number of test pedigrees which can be tested by the following statement.
+
+```{r}
+# get path to test pedigrees
+(vec_ped_path <- list.files(system.file('extdata', package = 'qpdt'), full.names = TRUE))
+```
+
+The first pedigree is the test-pedigree that can be obtained from the GenMon-Website. The difference between the first and the second test-pedigree is that the first has an animal with 'F' as a sire. In the second pedigree, this sire is removed. The first pedigree is checked by the following statement.
+
+```{r, message=FALSE}
+check_pedig_id(ps_pedig_path = vec_ped_path[1], ps_id_col = '#animal')
+```
+
+The output of the test-pedigree indicates that all animal IDs are unique.
+
+The checks of the remaining pedigrees are run by applying the function `check_pedig_id` to all the pedigrees.
+
+```{r, message=FALSE}
+# run checks
+lapply(vec_ped_path[3:length(vec_ped_path)], check_pedig_id)
+```
+
+The output of the second pedigree shows that all animal IDs are unique. The output of the first pedigree shows a list of duplicated IDs. They must be removed.
+
+
+# Parents
+Interesting quantities related to parents are 
+
+* number of animals with parents
+* are parents also animals
+* parent and offspring pairs with inconsistent birthdates
+
+The following function call checks the properties of parents for the first test pedigree `r vec_ped_path[2]`.
+
+```{r, message=FALSE}
+check_pedig_parent(ps_pedig_path = vec_ped_path[2],
+                   ps_id_col        = '#animal',
+                   ps_sire_col      = 'sire',
+                   ps_dam_col       = 'dam',
+                   ps_col_bd        = 'birth_date',
+                   pvec_sire_by     = c('sire' = '#animal'),
+                   pvec_dam_by      = c('dam' = '#animal'),
+                   pvec_sire_suffix = c(".animal", ".sire"),
+                   pvec_dam_suffix  = c(".animal", ".dam")) 
+```
+
+The checks for the other test pedigrees are done with the following apply-statement. This is possible, because these pedigrees have the same column headers.
+
+```{r, message=FALSE}
+lapply(vec_ped_path[3:length(vec_ped_path)], check_pedig_parent)
+```
+
+
+# Datatypes
+The processing of the pedigrees by PopReport and further by GenMon, requires that the columns of the pedigree contain objects of a certain data-type. The requirement of the data-types is checked by the function `check_pedigree_datatypes()`. The following statement shows a few tests and experiments.
+
+```{r, message=FALSE}
+tbl_ped <- read_prp_pedigree(ps_pedig_path = vec_ped_path[1], ps_delim = '|')
+```
+
+The data-types can be checked using the function `class()`.
+
+```{r}
+class(tbl_ped[["#animal"]])
+```
+
+In the pedigree 'tbl_ped', the column 'sire' has an unexpected data-type which is shown by 
+
+```{r}
+class(tbl_ped[["sire"]])
+```
+
+The column birthdate can have a special data-type
+
+```{r}
+class(tbl_ped[["birth_date"]])
+```
+
+A similar functionality can be achieved by the function `readr::guess_parser()`.
+
+```{r}
+readr::guess_parser(tbl_ped[["sire"]], guess_integer = TRUE)
+```
+
+For the column of dams
+
+```{r}
+readr::guess_parser(tbl_ped[["dam"]], guess_integer = TRUE)
+```
+
+In case of a column with floating point numbers, we get
+
+```{r}
+readr::guess_parser(tbl_ped[["introg"]], guess_integer = TRUE)
+```
+
+For each of the columns to be checked, we give the required data-type. This can be specified in a list
+
+```{r}
+(l_req_dt <- list(col = c("#animal", "sire", "dam", "birth_date", "sex", "plz", "introg"),
+                  dtp = c("integer", "integer", "integer", "date", "character", "integer", "double")))
+
+```
+
+The check can be performed in a simple loop
+
+```{r, message=FALSE}
+require(readr)
+tbl_par_problem <- NULL
+for (idx in seq_along(l_req_dt$col)) {
+  cat(" * Checking column: ", l_req_dt$col[idx], "\n")
+  s_cur_parser <- readr::guess_parser(tbl_ped[[ l_req_dt$col[idx]]], guess_integer = TRUE)
+  if (s_cur_parser != l_req_dt$dtp[idx]){
+    cat(" *** ERROR: column ",  l_req_dt$col[idx], " wrong datatype\n")
+    parfun <- match.fun(paste('parse_', l_req_dt$dtp[idx], sep = ''))
+    par_result <- parfun(tbl_ped[[l_req_dt$col[idx]]])
+    tbl_par_problem <- problems(par_result)
+  }
+}
+tbl_par_problem
+```
+
+
+The check is implemented in the function `check_pedigree_datatypes()`. This function requires as an input a list with column names and required datatypes. Such a list can be obtained using the function `get_pedigree_datatypes()`. 
+
+```{r, message=FALSE}
+(l_ped_dt_result <- get_pedigree_datatypes(ps_pedig_path = vec_ped_path[1]))
+```
+
+The list required as input for `check_pedigree_datatypes()` is obtained as the component `l_dtype` of the result of `get_pedigree_datatypes()` by 
+
+```{r}
+l_ped_dt_result$l_dtype
+```
+
+From this result, we can see that the column of "sire-IDs" has datatype `r l_ped_dt_result$l_dtype$dtp[which(l_ped_dt_result$l_dtype$col == "sire")]`. This is not correct, because all ID-columns should have the same datatype. The problematic entry in the sire-ID column can be found by the result of the function `check_pedigree_datatypes()`. 
+
+The check can now be run by
+
+```{r, message=FALSE}
+l_dtype <- l_ped_dt_result$l_dtype
+l_dtype$dtp[which(l_dtype$col == "sire")] <- "integer"
+(l_dtp_check_result <- check_pedigree_datatypes(ps_pedig_path = vec_ped_path[1], pl_dtype = l_dtype))
+```
+
