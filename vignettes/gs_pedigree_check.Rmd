@@ -2,7 +2,7 @@
 title: "Checking Consistency of Animal Pedigrees"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Checking Pedigrees For PopReport}
+  %\VignetteIndexEntry{Checking Consistency of Animal Pedigrees}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
