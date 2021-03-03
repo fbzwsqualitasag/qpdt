@@ -10,6 +10,8 @@ Description: Animal pedigrees are an important source of information in genetic
     evaluations and in other types of statistical analyses. All of them rely 
     on certain consistency properties of pedigrees. These properties are checked 
     in this package.
+URL: https://fbzwsqualitasag.github.io/qpdt/
+BugReports: https://github.com/fbzwsqualitasag/qpdt/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en
