@@ -1,0 +1,27 @@
+---
+title: "Report Pedigree Checks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Report Pedigree Checks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(qpdt)
+```
+
+
+## Disclaimer
+Preparatory work for creating reports based on checks of pedigrees is described.
+
+
+## Goal
+
