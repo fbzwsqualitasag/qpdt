@@ -10,14 +10,16 @@ check_pedig_parent(
   ps_id_col = "#IDTier",
   ps_sire_col = "IDVater",
   ps_dam_col = "IDMutter",
-  ps_col_bd = "Birthdate",
+  ps_bd_col = "Birthdate",
+  ps_sex_col = "Geschlecht",
   pvec_sire_by = c(IDVater = "#IDTier"),
   pvec_dam_by = c(IDMutter = "#IDTier"),
   pvec_sire_suffix = c(".Tier", ".Vater"),
   pvec_dam_suffix = c(".Tier", ".Mutter"),
   pcol_types = NULL,
   ptbl_pedigree = NULL,
-  pn_bd_tol = 0
+  pn_bd_tol = 0,
+  pl_wrong_sex = list(sire = "F", dam = "M")
 )
 }
 \arguments{
@@ -31,7 +33,9 @@ check_pedig_parent(
 
 \item{ps_dam_col}{column title for dam IDs}
 
-\item{ps_col_bd}{column title for birthdates}
+\item{ps_bd_col}{column title for birthdates}
+
+\item{ps_sex_col}{column title for sex}
 
 \item{pvec_sire_by}{by argument for inner_join with sires}
 
@@ -46,6 +50,8 @@ check_pedig_parent(
 \item{ptbl_pedigree}{tibble containing pedigree information}
 
 \item{pn_bd_tol}{minimal tolerance for age difference between animal and parents (in days)}
+
+\item{pl_wrong_sex}{list with characters denoting the wrong sex}
 }
 \description{
 Some descriptive statistics about the pedigree are collected. The main
@@ -64,7 +70,7 @@ The comparison is done for sires and dams in two separate steps.
 \dontrun{
 check_pedig_parent(ps_pedig_path = system.file('extdata',
     'PopReport_SN_ohne_20210115.csv_adaptfin2.csv',
-  package = 'qprppedigree'))
+  package = 'qpdt'))
 }
 
 }

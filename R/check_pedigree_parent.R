@@ -30,12 +30,13 @@
 #' @param pcol_types column types of pedigree in ps_pedig_path
 #' @param ptbl_pedigree tibble containing pedigree information
 #' @param pn_bd_tol minimal tolerance for age difference between animal and parents (in days)
+#' @param pl_wrong_sex list with characters denoting the wrong sex
 #'
 #' @examples
 #' \dontrun{
 #' check_pedig_parent(ps_pedig_path = system.file('extdata',
 #'     'PopReport_SN_ohne_20210115.csv_adaptfin2.csv',
-#'   package = 'qprppedigree'))
+#'   package = 'qpdt'))
 #' }
 #'
 #' @importFrom dplyr %>%
@@ -53,7 +54,8 @@ check_pedig_parent <- function(ps_pedig_path,
                                pvec_dam_suffix  = c(".Tier", ".Mutter"),
                                pcol_types       = NULL,
                                ptbl_pedigree    = NULL,
-                               pn_bd_tol        = 0){
+                               pn_bd_tol        = 0,
+                               pl_wrong_sex     = list(sire = 'F', dam = 'M')){
   # check whether pedigree must be read
   if (is.null(ptbl_pedigree)){
     tbl_pedigree <- read_prp_pedigree(ps_pedig_path = ps_pedig_path, ps_delim = ps_delim, pcol_types = pcol_types)
@@ -107,7 +109,14 @@ check_pedig_parent <- function(ps_pedig_path,
                                              psym_parent_id = sym_sire_id,
                                              psym_sex_col   = sym_sex_col,
                                              pvec_parent_by = pvec_sire_by,
-                                             ps_wrong_sex   = 'F')
+                                             ps_wrong_sex   = pl_wrong_sex$sire)
+  tbl_dam_sex_err <- get_tbl_parent_sex_err(ptbl_pedigree = tbl_pedigree,
+                                             psym_animal_id = sym_animal_id,
+                                             psym_parent_id = sym_dam_id,
+                                             psym_sex_col   = sym_sex_col,
+                                             pvec_parent_by = pvec_dam_by,
+                                             ps_wrong_sex   = pl_wrong_sex$dam)
+
 
   # return results
   return(list(PedFile         = ps_pedig_path,
@@ -119,7 +128,8 @@ check_pedig_parent <- function(ps_pedig_path,
               TblDamBdate     = tbl_dam_bd_err,
               TblSireEqID     = tbl_sire_equal_id,
               TblDamEqID      = tbl_dam_equal_id,
-              TblSireWrongSex = tbl_sire_sex_err))
+              TblSireWrongSex = tbl_sire_sex_err,
+              TblDamWrongSex  = tbl_dam_sex_err))
 
 }
 
@@ -147,18 +157,19 @@ get_tbl_parent_sex_err <- function(ptbl_pedigree,
                                    pvec_parent_by,
                                    ps_wrong_sex){
   # tibble containing all parent ids
-  tbl_parent_id <- ptbl_pedigree %>% distinct(!!psym_parent_id)
+  tbl_parent_id <- ptbl_pedigree %>% dplyr::distinct(!!psym_parent_id)
   # join the parent ids back to the pedigree to get the sex of the parent
   tbl_parent_sex <- tbl_parent_id %>%
-    inner_join(ptbl_pedigree, by = pvec_parent_by) %>%
-    select(!!psym_parent_id, !!psym_sex_col)
+    dplyr::inner_join(ptbl_pedigree, by = pvec_parent_by) %>%
+    dplyr::select(!!psym_parent_id, !!psym_sex_col)
   # tibble with parents with the wrong sex
   tbl_parent_wrong_sex <- tbl_parent_sex %>%
-    filter(!!psym_sex_col == ps_wrong_sex)
+    dplyr::filter(!!psym_sex_col == ps_wrong_sex)
   # join back to get information
   return(tbl_parent_wrong_sex %>%
-           inner_join(ptbl_pedigree, by = pvec_parent_by) %>%
-           select(!!psym_animal_id, !!psym_sex_col))
+           dplyr::select(!!psym_parent_id)  %>%
+           dplyr::inner_join(ptbl_pedigree, by = pvec_parent_by) %>%
+           dplyr::select(!!psym_parent_id, !!psym_sex_col))
 
 }
 
