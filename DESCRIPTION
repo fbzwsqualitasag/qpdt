@@ -1,6 +1,6 @@
 Package: qpdt
 Title: Consistency Checks For Animal Pedigrees
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "Peter",
            family = "von Rohr",
