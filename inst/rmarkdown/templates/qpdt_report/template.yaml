@@ -1,0 +1,4 @@
+name: qpdt Report
+description: >
+   Report for pedigree checks
+create_dir: TRUE

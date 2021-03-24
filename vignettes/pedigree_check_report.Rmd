@@ -24,4 +24,19 @@ Preparatory work for creating reports based on checks of pedigrees is described.
 
 
 ## Goal
+Provide a tool that allows for a seamless creation of a report that includes all checks and diagnosis for a given pedigree. 
+
+
+## Implementation
+The report is generated based on a parametrized Rmarkdown document that can be rendered into different output formats. At a later stage alternative approaches such as providing the pedigree checks in a ShinyApp might be released.
+
+
+## Checks
+The checks that are included into the report are determined by the available features in the R-package `qpdt`. The checks can be grouped into two classes.
+
+1. __simple checks__ involving the verification of general properties of a pedigree
+2. __extended checks__ which might require some inputs from the user to adapt the check to the specific pedigree to be checked.
+
+
+
 
