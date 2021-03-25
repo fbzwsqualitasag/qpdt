@@ -35,7 +35,7 @@ create_pedigree_report <- function(ps_pedigree_path,
                                            create_dir = TRUE,
                                            edit = FALSE)
   # render the reprort with parameters to generate the output of the report
-  rmarkdown::render(input = s_report_path,
+  rmarkdown::render(input = s_render_report_path,
                     output_format = "html_document",
                     params = list(pedigreeName = basename(ps_pedigree_path)))
 
