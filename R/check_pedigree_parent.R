@@ -23,10 +23,6 @@
 #' @param ps_dam_col column title for dam IDs
 #' @param ps_bd_col column title for birthdates
 #' @param ps_sex_col column title for sex
-#' @param pvec_sire_by by argument for inner_join with sires
-#' @param pvec_dam_by by argument for inner_join with dams
-#' @param pvec_sire_suffix suffix for birthdates used for sire comparison
-#' @param pvec_dam_suffix suffix for birthdates used for dam comparision
 #' @param pcol_types column types of pedigree in ps_pedig_path
 #' @param ptbl_pedigree tibble containing pedigree information
 #' @param pn_bd_tol minimal tolerance for age difference between animal and parents (in days)
@@ -48,10 +44,6 @@ check_pedig_parent <- function(ps_pedig_path,
                                ps_dam_col       = 'IDMutter',
                                ps_bd_col        = 'Birthdate',
                                ps_sex_col       = 'Geschlecht',
-                               pvec_sire_by     = c('IDVater' = '#IDTier'),
-                               pvec_dam_by      = c('IDMutter' = '#IDTier'),
-                               pvec_sire_suffix = c(".Tier", ".Vater"),
-                               pvec_dam_suffix  = c(".Tier", ".Mutter"),
                                pcol_types       = NULL,
                                ptbl_pedigree    = NULL,
                                pn_bd_tol        = 0,
@@ -62,6 +54,14 @@ check_pedig_parent <- function(ps_pedig_path,
   } else {
     tbl_pedigree <- ptbl_pedigree
   }
+  # arguments and defaults derived from arguments
+  vec_join_by_sire <- ps_id_col
+  names(vec_join_by_sire) <- ps_sire_col
+  vec_join_by_dam <- ps_id_col
+  names(vec_join_by_dam) <- ps_dam_col
+  vec_sire_suffix <- c(paste0('.',ps_id_col), paste0('.', ps_sire_col))
+  vec_dam_suffix <- c(paste0('.',ps_id_col), paste0('.', ps_dam_col))
+
   # animals with missing parents
   nr_missing_sire <- sum(is.na(tbl_pedigree[[ps_sire_col]]))
   nr_missing_dam <- sum(is.na(tbl_pedigree[[ps_dam_col]]))
@@ -80,24 +80,24 @@ check_pedig_parent <- function(ps_pedig_path,
   sym_dam_id <- dplyr::sym(ps_dam_col)
   sym_bd_col <- dplyr::sym(ps_bd_col)
   sym_sex_col <- dplyr::sym(ps_sex_col)
-  vec_sire_bd <- sapply(pvec_sire_suffix, function(x) paste(ps_bd_col, x, sep = ''), USE.NAMES = FALSE)
+  vec_sire_bd <- sapply(vec_sire_suffix, function(x) paste(ps_bd_col, x, sep = ''), USE.NAMES = FALSE)
   sym_sire_animal_bd <- dplyr::sym(vec_sire_bd[1])
   sym_sire_parent_bd <- dplyr::sym(vec_sire_bd[2])
-  vec_dam_bd <- sapply(pvec_dam_suffix, function(x) paste(ps_bd_col, x, sep = ''), USE.NAMES = FALSE)
+  vec_dam_bd <- sapply(vec_dam_suffix, function(x) paste(ps_bd_col, x, sep = ''), USE.NAMES = FALSE)
   sym_dam_animal_bd <- dplyr::sym(vec_dam_bd[1])
   sym_dam_parent_bd <- dplyr::sym(vec_dam_bd[2])
   # create the tibble with animal, sire and birthdate
   tbl_sire_bd <- tbl_pedigree %>% dplyr::select(!!sym_animal_id, !!sym_sire_id, !!sym_bd_col)
   # join birthdate of sire and filter those with inconsistent birthdate
   tbl_sire_bd_err <- tbl_sire_bd %>%
-    dplyr::inner_join(tbl_pedigree, by = pvec_sire_by, suffix = pvec_sire_suffix) %>%
+    dplyr::inner_join(tbl_pedigree, by = vec_join_by_sire, suffix = vec_sire_suffix) %>%
     dplyr::select(!!sym_animal_id, !!sym_sire_id, !!sym_sire_animal_bd, !!sym_sire_parent_bd) %>%
     dplyr::filter(!!sym_sire_animal_bd - !!sym_sire_parent_bd < pn_bd_tol)
   # create the tibble with animal, dam and birthdate
   tbl_dam_bd <- tbl_pedigree %>% dplyr::select(!!sym_animal_id, !!sym_dam_id, !!sym_bd_col)
   # join birthdate of dam and filter those with inconsistent birthdates
   tbl_dam_bd_err <- tbl_dam_bd %>%
-    dplyr::inner_join(tbl_pedigree, by = pvec_dam_by, suffix = pvec_dam_suffix) %>%
+    dplyr::inner_join(tbl_pedigree, by = vec_join_by_dam, suffix = vec_dam_suffix) %>%
     dplyr::select(!!sym_animal_id, !!sym_dam_id, !!sym_dam_animal_bd, !!sym_dam_parent_bd) %>%
     dplyr::filter(!!sym_dam_animal_bd - !!sym_dam_parent_bd < pn_bd_tol)
   # use filter to find animals with same IDs as parents
@@ -108,13 +108,13 @@ check_pedig_parent <- function(ps_pedig_path,
                                              psym_animal_id = sym_animal_id,
                                              psym_parent_id = sym_sire_id,
                                              psym_sex_col   = sym_sex_col,
-                                             pvec_parent_by = pvec_sire_by,
+                                             pvec_parent_by = vec_join_by_sire,
                                              ps_wrong_sex   = pl_wrong_sex$sire)
   tbl_dam_sex_err <- get_tbl_parent_sex_err(ptbl_pedigree = tbl_pedigree,
                                              psym_animal_id = sym_animal_id,
                                              psym_parent_id = sym_dam_id,
                                              psym_sex_col   = sym_sex_col,
-                                             pvec_parent_by = pvec_dam_by,
+                                             pvec_parent_by = vec_join_by_dam,
                                              ps_wrong_sex   = pl_wrong_sex$dam)
 
 

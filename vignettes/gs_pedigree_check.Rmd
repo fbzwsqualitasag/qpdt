@@ -45,7 +45,8 @@ Animal IDs are the primary keys of an individual. Hence these IDs must be unique
 The first pedigree is the test-pedigree that can be obtained from the GenMon-Website. The difference between the first and the second test-pedigree is that the first has an animal with 'F' as a sire. In the second pedigree, this sire is removed. The first pedigree is checked by the following statement.
 
 ```{r, message=FALSE}
-check_pedig_id(ps_pedig_path = vec_ped_path[1], ps_id_col = '#animal')
+check_pedig_id(ps_pedig_path = vec_ped_path[1], 
+               ps_id_col = '#animal')
 ```
 
 The output of the test-pedigree indicates that all animal IDs are unique.
@@ -74,11 +75,8 @@ check_pedig_parent(ps_pedig_path = vec_ped_path[2],
                    ps_id_col        = '#animal',
                    ps_sire_col      = 'sire',
                    ps_dam_col       = 'dam',
-                   ps_col_bd        = 'birth_date',
-                   pvec_sire_by     = c('sire' = '#animal'),
-                   pvec_dam_by      = c('dam' = '#animal'),
-                   pvec_sire_suffix = c(".animal", ".sire"),
-                   pvec_dam_suffix  = c(".animal", ".dam")) 
+                   ps_bd_col        = 'birth_date',
+                   ps_sex_col       = 'sex') 
 ```
 
 The checks for the other test pedigrees are done with the following apply-statement. This is possible, because these pedigrees have the same column headers.

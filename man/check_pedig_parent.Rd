@@ -12,10 +12,6 @@ check_pedig_parent(
   ps_dam_col = "IDMutter",
   ps_bd_col = "Birthdate",
   ps_sex_col = "Geschlecht",
-  pvec_sire_by = c(IDVater = "#IDTier"),
-  pvec_dam_by = c(IDMutter = "#IDTier"),
-  pvec_sire_suffix = c(".Tier", ".Vater"),
-  pvec_dam_suffix = c(".Tier", ".Mutter"),
   pcol_types = NULL,
   ptbl_pedigree = NULL,
   pn_bd_tol = 0,
@@ -36,14 +32,6 @@ check_pedig_parent(
 \item{ps_bd_col}{column title for birthdates}
 
 \item{ps_sex_col}{column title for sex}
-
-\item{pvec_sire_by}{by argument for inner_join with sires}
-
-\item{pvec_dam_by}{by argument for inner_join with dams}
-
-\item{pvec_sire_suffix}{suffix for birthdates used for sire comparison}
-
-\item{pvec_dam_suffix}{suffix for birthdates used for dam comparision}
 
 \item{pcol_types}{column types of pedigree in ps_pedig_path}
 

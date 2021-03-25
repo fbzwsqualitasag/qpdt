@@ -8,7 +8,8 @@ create_pedigree_report(
   ps_pedigree_path,
   ps_report_outdir = ".",
   ps_report_rmd = paste0(format(Sys.time(), "\%Y\%m\%d\%H\%M\%S"),
-    "_qpdt_pedigree_report.Rmd", collapse = "")
+    "_qpdt_pedigree_report.Rmd", collapse = ""),
+  pl_params = NULL
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ create_pedigree_report(
 \item{ps_report_outdir}{report output directory}
 
 \item{ps_report_rmd}{name of the pedigree report file}
+
+\item{pl_params}{list of parameters to be included in the report}
 }
 \description{
 The checks in this package are done for a given pedigree given by ps_pedigree_path.
@@ -25,7 +28,10 @@ function.
 }
 \examples{
 \dontrun{
-
+s_pedigree_path <- file.path(here::here(), 'inst', 'extdata', 'PopReport_OST_mit_20210318.csv_adaptfin5.csv')
+create_pedigree_report(ps_pedigree_path = system.file('extdata',
+    'PopReport_SN_ohne_20210115.csv_adaptfin2.csv',package = 'qpdt'),
+  ps_report_outdir = file.path(here::here(), 'scratch', 'report_out'))
 }
 
 }
