@@ -26,11 +26,14 @@ create_pedigree_report <- function(ps_pedigree_path,
     stop(" *** ERROR: [qpdt::create_pedigree_report] CANNOT FIND: ", ps_pedigree_path)
   if (!dir.exists(ps_report_outdir))
     dir.create(ps_report_outdir, recursive = TRUE)
-  # add additional subdirectory to report-path which is caused by rmarkdown::draft
-  s_report_dir <- file.path(ps_report_outdir, fs::path_ext_remove(ps_report_rmd))
-  s_report_path <- file.path(s_report_dir, ps_report_rmd)
+  # create report path for rmarkdown::draft
+  s_draft_report_path <- file.path(ps_report_outdir, ps_report_rmd)
   # use the template to get started with the report
-  rmarkdown::draft(file = s_report_path, template = 'qpdt_report', package = 'qpdt', create_dir = TRUE, edit = FALSE)
+  s_render_report_path <- rmarkdown::draft(file = s_draft_report_path,
+                                           template = 'qpdt_report',
+                                           package = 'qpdt',
+                                           create_dir = TRUE,
+                                           edit = FALSE)
   # render the reprort with parameters to generate the output of the report
   rmarkdown::render(input = s_report_path,
                     output_format = "html_document",
