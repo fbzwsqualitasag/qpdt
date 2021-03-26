@@ -18,6 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
+The website of qpdt is available under https://fbzwsqualitasag.github.io/qpdt/
+
+
 The goal of qpdt is to provide a package with generic pedigree tools used at Qualitas AG. 
 
 
