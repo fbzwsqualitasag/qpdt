@@ -77,7 +77,7 @@ parents." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qpdt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@ parents." />
       <a href="../articles/gs_pedigree_check.html">Checking Consistency of Animal Pedigrees</a>
     </li>
     <li>
+      <a href="../articles/pedigree_check_report.html">Report Pedigree Checks</a>
+    </li>
+    <li>
       <a href="../articles/pedigree_cycle_check.html">Check for Cycles in Pedigrees</a>
     </li>
   </ul>
@@ -112,7 +115,12 @@ parents." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/fbzwsqualitasag/qpdt/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -127,7 +135,7 @@ parents." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check Properties of Parents in a Pedigree</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/fbzwsqualitasag/qpdt/blob/master/R/check_pedigree_parent.R'><code>R/check_pedigree_parent.R</code></a></small>
     <div class="hidden name"><code>check_pedig_parent.Rd</code></div>
     </div>
 
@@ -146,14 +154,12 @@ parents.</p>
   <span class='kw'>ps_id_col</span> <span class='kw'>=</span> <span class='st'>"#IDTier"</span>,
   <span class='kw'>ps_sire_col</span> <span class='kw'>=</span> <span class='st'>"IDVater"</span>,
   <span class='kw'>ps_dam_col</span> <span class='kw'>=</span> <span class='st'>"IDMutter"</span>,
-  <span class='kw'>ps_col_bd</span> <span class='kw'>=</span> <span class='st'>"Birthdate"</span>,
-  <span class='kw'>pvec_sire_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>IDVater</span> <span class='kw'>=</span> <span class='st'>"#IDTier"</span>),
-  <span class='kw'>pvec_dam_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>IDMutter</span> <span class='kw'>=</span> <span class='st'>"#IDTier"</span>),
-  <span class='kw'>pvec_sire_suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".Tier"</span>, <span class='st'>".Vater"</span>),
-  <span class='kw'>pvec_dam_suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".Tier"</span>, <span class='st'>".Mutter"</span>),
+  <span class='kw'>ps_bd_col</span> <span class='kw'>=</span> <span class='st'>"Birthdate"</span>,
+  <span class='kw'>ps_sex_col</span> <span class='kw'>=</span> <span class='st'>"Geschlecht"</span>,
   <span class='kw'>pcol_types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ptbl_pedigree</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pn_bd_tol</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  <span class='kw'>pn_bd_tol</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>pl_wrong_sex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>sire</span> <span class='kw'>=</span> <span class='st'>"F"</span>, <span class='kw'>dam</span> <span class='kw'>=</span> <span class='st'>"M"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -180,24 +186,12 @@ parents.</p>
       <td><p>column title for dam IDs</p></td>
     </tr>
     <tr>
-      <th>ps_col_bd</th>
+      <th>ps_bd_col</th>
       <td><p>column title for birthdates</p></td>
     </tr>
     <tr>
-      <th>pvec_sire_by</th>
-      <td><p>by argument for inner_join with sires</p></td>
-    </tr>
-    <tr>
-      <th>pvec_dam_by</th>
-      <td><p>by argument for inner_join with dams</p></td>
-    </tr>
-    <tr>
-      <th>pvec_sire_suffix</th>
-      <td><p>suffix for birthdates used for sire comparison</p></td>
-    </tr>
-    <tr>
-      <th>pvec_dam_suffix</th>
-      <td><p>suffix for birthdates used for dam comparision</p></td>
+      <th>ps_sex_col</th>
+      <td><p>column title for sex</p></td>
     </tr>
     <tr>
       <th>pcol_types</th>
@@ -211,6 +205,10 @@ parents.</p>
       <th>pn_bd_tol</th>
       <td><p>minimal tolerance for age difference between animal and parents (in days)</p></td>
     </tr>
+    <tr>
+      <th>pl_wrong_sex</th>
+      <td><p>list with characters denoting the wrong sex</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -223,7 +221,7 @@ The comparison is done for sires and dams in two separate steps.</p>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>check_pedig_parent</span>(<span class='kw'>ps_pedig_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>'extdata'</span>,
     <span class='st'>'PopReport_SN_ohne_20210115.csv_adaptfin2.csv'</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'qprppedigree'</span>))
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'qpdt'</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

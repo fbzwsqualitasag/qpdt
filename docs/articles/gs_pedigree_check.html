@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qpdt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -57,6 +57,9 @@
       <a href="../articles/gs_pedigree_check.html">Checking Consistency of Animal Pedigrees</a>
     </li>
     <li>
+      <a href="../articles/pedigree_check_report.html">Report Pedigree Checks</a>
+    </li>
+    <li>
       <a href="../articles/pedigree_cycle_check.html">Check for Cycles in Pedigrees</a>
     </li>
   </ul>
@@ -65,7 +68,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/fbzwsqualitasag/qpdt/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,7 +91,7 @@
       <h1 data-toc-skip>Checking Consistency of Animal Pedigrees</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/fbzwsqualitasag/qpdt/blob/master/vignettes/gs_pedigree_check.Rmd"><code>vignettes/gs_pedigree_check.Rmd</code></a></small>
       <div class="hidden name"><code>gs_pedigree_check.Rmd</code></div>
 
     </div>
@@ -113,16 +123,17 @@
 <p>Animal IDs are the primary keys of an individual. Hence these IDs must be unique. This uniqueness is tested with the following statement using the function <code><a href="../reference/check_pedig_id.html">check_pedig_id()</a></code>. This function requires the path to an input pedigree as an argument. This package contains a number of test pedigrees which can be tested by the following statement.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># get path to test pedigrees</span>
 (<span class="no">vec_ped_path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">'extdata'</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">'qpdt'</span>), <span class="kw">full.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample.csv"                             </span>
-<span class="co">#&gt; [2] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample2.csv"                            </span>
-<span class="co">#&gt; [3] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv" </span>
-<span class="co">#&gt; [4] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample.csv"                             </span>
+<span class="co">#&gt; [2] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample2.csv"                            </span>
+<span class="co">#&gt; [3] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv" </span>
+<span class="co">#&gt; [4] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span></pre></body></html></div>
 <p>The first pedigree is the test-pedigree that can be obtained from the GenMon-Website. The difference between the first and the second test-pedigree is that the first has an animal with ‘F’ as a sire. In the second pedigree, this sire is removed. The first pedigree is checked by the following statement.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/check_pedig_id.html">check_pedig_id</a></span>(<span class="kw">ps_pedig_path</span> <span class="kw">=</span> <span class="no">vec_ped_path</span>[<span class="fl">1</span>], <span class="kw">ps_id_col</span> <span class="kw">=</span> <span class="st">'#animal'</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/check_pedig_id.html">check_pedig_id</a></span>(<span class="kw">ps_pedig_path</span> <span class="kw">=</span> <span class="no">vec_ped_path</span>[<span class="fl">1</span>],
+               <span class="kw">ps_id_col</span> <span class="kw">=</span> <span class="st">'#animal'</span>)
 <span class="co">#&gt; Warning: `guess_max` is a very large value, setting to `21474836` to avoid</span>
 <span class="co">#&gt; exhausting memory</span>
 <span class="co">#&gt; $PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $NrRecord</span>
 <span class="co">#&gt; [1] 1227</span>
@@ -143,7 +154,7 @@
 <span class="co">#&gt; exhausting memory</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [[1]]$PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$NrRecord</span>
 <span class="co">#&gt; [1] 172076</span>
@@ -170,7 +181,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt; [[2]]$PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]$NrRecord</span>
 <span class="co">#&gt; [1] 95119</span>
@@ -191,20 +202,17 @@
 <li>are parents also animals</li>
 <li>parent and offspring pairs with inconsistent birthdates</li>
 </ul>
-<p>The following function call checks the properties of parents for the first test pedigree /private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample2.csv.</p>
+<p>The following function call checks the properties of parents for the first test pedigree /private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample2.csv.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/check_pedig_parent.html">check_pedig_parent</a></span>(<span class="kw">ps_pedig_path</span> <span class="kw">=</span> <span class="no">vec_ped_path</span>[<span class="fl">2</span>],
                    <span class="kw">ps_id_col</span>        <span class="kw">=</span> <span class="st">'#animal'</span>,
                    <span class="kw">ps_sire_col</span>      <span class="kw">=</span> <span class="st">'sire'</span>,
                    <span class="kw">ps_dam_col</span>       <span class="kw">=</span> <span class="st">'dam'</span>,
-                   <span class="kw">ps_col_bd</span>        <span class="kw">=</span> <span class="st">'birth_date'</span>,
-                   <span class="kw">pvec_sire_by</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'sire'</span> <span class="kw">=</span> <span class="st">'#animal'</span>),
-                   <span class="kw">pvec_dam_by</span>      <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'dam'</span> <span class="kw">=</span> <span class="st">'#animal'</span>),
-                   <span class="kw">pvec_sire_suffix</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">".animal"</span>, <span class="st">".sire"</span>),
-                   <span class="kw">pvec_dam_suffix</span>  <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">".animal"</span>, <span class="st">".dam"</span>))
+                   <span class="kw">ps_bd_col</span>        <span class="kw">=</span> <span class="st">'birth_date'</span>,
+                   <span class="kw">ps_sex_col</span>       <span class="kw">=</span> <span class="st">'sex'</span>)
 <span class="co">#&gt; Warning: `guess_max` is a very large value, setting to `21474836` to avoid</span>
 <span class="co">#&gt; exhausting memory</span>
 <span class="co">#&gt; $PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample2.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample2.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $NrMissingSire</span>
 <span class="co">#&gt; [1] 2</span>
@@ -220,12 +228,12 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblSireBdate</span>
 <span class="co">#&gt; # A tibble: 0 x 4</span>
-<span class="co">#&gt; # … with 4 variables: `#animal` &lt;dbl&gt;, sire &lt;dbl&gt;, birth_date.animal &lt;date&gt;,</span>
+<span class="co">#&gt; # … with 4 variables: `#animal` &lt;dbl&gt;, sire &lt;dbl&gt;, `birth_date.#animal` &lt;date&gt;,</span>
 <span class="co">#&gt; #   birth_date.sire &lt;date&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblDamBdate</span>
 <span class="co">#&gt; # A tibble: 0 x 4</span>
-<span class="co">#&gt; # … with 4 variables: `#animal` &lt;dbl&gt;, dam &lt;dbl&gt;, birth_date.animal &lt;date&gt;,</span>
+<span class="co">#&gt; # … with 4 variables: `#animal` &lt;dbl&gt;, dam &lt;dbl&gt;, `birth_date.#animal` &lt;date&gt;,</span>
 <span class="co">#&gt; #   birth_date.dam &lt;date&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblSireEqID</span>
@@ -238,7 +246,15 @@
 <span class="co">#&gt; # A tibble: 0 x 9</span>
 <span class="co">#&gt; # … with 9 variables: `#animal` &lt;dbl&gt;, sire &lt;dbl&gt;, dam &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   birth_date &lt;date&gt;, sex &lt;chr&gt;, plz &lt;dbl&gt;, introg &lt;dbl&gt;, inb_gen &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   cryo &lt;lgl&gt;</span></pre></body></html></div>
+<span class="co">#&gt; #   cryo &lt;lgl&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $TblSireWrongSex</span>
+<span class="co">#&gt; # A tibble: 0 x 2</span>
+<span class="co">#&gt; # … with 2 variables: sire &lt;dbl&gt;, sex &lt;chr&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $TblDamWrongSex</span>
+<span class="co">#&gt; # A tibble: 0 x 2</span>
+<span class="co">#&gt; # … with 2 variables: dam &lt;dbl&gt;, sex &lt;chr&gt;</span></pre></body></html></div>
 <p>The checks for the other test pedigrees are done with the following apply-statement. This is possible, because these pedigrees have the same column headers.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">vec_ped_path</span>[<span class="fl">3</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">vec_ped_path</span>)], <span class="no">check_pedig_parent</span>)
 <span class="co">#&gt; Warning: `guess_max` is a very large value, setting to `21474836` to avoid</span>
@@ -248,7 +264,7 @@
 <span class="co">#&gt; exhausting memory</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [[1]]$PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_GG_mit_20210113.csv_adaptfin2.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$NrMissingSire</span>
 <span class="co">#&gt; [1] 9288</span>
@@ -264,20 +280,20 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$TblSireBdate</span>
 <span class="co">#&gt; # A tibble: 6 x 4</span>
-<span class="co">#&gt;   `#IDTier`   IDVater Birthdate.Tier Birthdate.Vater</span>
-<span class="co">#&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;         </span>
-<span class="co">#&gt; 1 999780574 999780544 1910-01-01     2007-03-01     </span>
-<span class="co">#&gt; 2 999780582 999780544 1910-01-01     2007-03-01     </span>
-<span class="co">#&gt; 3 999750225 999439795 1910-01-02     1991-12-14     </span>
-<span class="co">#&gt; 4 999552253 999552298 1994-03-01     1995-03-01     </span>
-<span class="co">#&gt; 5 999780535 999481777 1995-03-01     1997-11-15     </span>
-<span class="co">#&gt; 6 999791525 999757076 2010-03-01     2010-12-23     </span>
+<span class="co">#&gt;   `#IDTier`   IDVater `Birthdate.#IDTier` Birthdate.IDVater</span>
+<span class="co">#&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;           </span>
+<span class="co">#&gt; 1 999780574 999780544 1910-01-01          2007-03-01       </span>
+<span class="co">#&gt; 2 999780582 999780544 1910-01-01          2007-03-01       </span>
+<span class="co">#&gt; 3 999750225 999439795 1910-01-02          1991-12-14       </span>
+<span class="co">#&gt; 4 999552253 999552298 1994-03-01          1995-03-01       </span>
+<span class="co">#&gt; 5 999780535 999481777 1995-03-01          1997-11-15       </span>
+<span class="co">#&gt; 6 999791525 999757076 2010-03-01          2010-12-23       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$TblDamBdate</span>
 <span class="co">#&gt; # A tibble: 1 x 4</span>
-<span class="co">#&gt;   `#IDTier`  IDMutter Birthdate.Tier Birthdate.Mutter</span>
-<span class="co">#&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;          </span>
-<span class="co">#&gt; 1 999780585 999774799 1910-01-01     2007-03-01      </span>
+<span class="co">#&gt;   `#IDTier`  IDMutter `Birthdate.#IDTier` Birthdate.IDMutter</span>
+<span class="co">#&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;            </span>
+<span class="co">#&gt; 1 999780585 999774799 1910-01-01          2007-03-01        </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$TblSireEqID</span>
 <span class="co">#&gt; # A tibble: 0 x 9</span>
@@ -291,10 +307,20 @@
 <span class="co">#&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 1004954789   1.00e9    1.00e9 NA         F             NA      0 NA          0</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$TblSireWrongSex</span>
+<span class="co">#&gt; # A tibble: 0 x 2</span>
+<span class="co">#&gt; # … with 2 variables: IDVater &lt;dbl&gt;, Geschlecht &lt;chr&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$TblDamWrongSex</span>
+<span class="co">#&gt; # A tibble: 1 x 2</span>
+<span class="co">#&gt;     IDMutter Geschlecht</span>
+<span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;     </span>
+<span class="co">#&gt; 1 1004954570 M         </span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt; [[2]]$PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]$NrMissingSire</span>
 <span class="co">#&gt; [1] 1211</span>
@@ -310,24 +336,24 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]$TblSireBdate</span>
 <span class="co">#&gt; # A tibble: 9 x 4</span>
-<span class="co">#&gt;    `#IDTier`    IDVater Birthdate.Tier Birthdate.Vater</span>
-<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;         </span>
-<span class="co">#&gt; 1 1000810031 1000050624 2013-03-09     2013-05-02     </span>
-<span class="co">#&gt; 2  999870937 1000161006 2013-03-20     2013-10-08     </span>
-<span class="co">#&gt; 3 1000810027 1000050624 2013-03-25     2013-05-02     </span>
-<span class="co">#&gt; 4 1000813707 1000050624 2013-03-26     2013-05-02     </span>
-<span class="co">#&gt; 5 1000810038 1000050624 2013-03-26     2013-05-02     </span>
-<span class="co">#&gt; 6 1000810020 1000050624 2013-04-15     2013-05-02     </span>
-<span class="co">#&gt; 7 1000711443 1000050624 2013-04-15     2013-05-02     </span>
-<span class="co">#&gt; 8 1000456126 1005609568 2013-11-26     2016-02-02     </span>
-<span class="co">#&gt; 9 1004653188 1005845648 2015-03-07     2016-09-29     </span>
+<span class="co">#&gt;    `#IDTier`    IDVater `Birthdate.#IDTier` Birthdate.IDVater</span>
+<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;           </span>
+<span class="co">#&gt; 1 1000810031 1000050624 2013-03-09          2013-05-02       </span>
+<span class="co">#&gt; 2  999870937 1000161006 2013-03-20          2013-10-08       </span>
+<span class="co">#&gt; 3 1000810027 1000050624 2013-03-25          2013-05-02       </span>
+<span class="co">#&gt; 4 1000813707 1000050624 2013-03-26          2013-05-02       </span>
+<span class="co">#&gt; 5 1000810038 1000050624 2013-03-26          2013-05-02       </span>
+<span class="co">#&gt; 6 1000810020 1000050624 2013-04-15          2013-05-02       </span>
+<span class="co">#&gt; 7 1000711443 1000050624 2013-04-15          2013-05-02       </span>
+<span class="co">#&gt; 8 1000456126 1005609568 2013-11-26          2016-02-02       </span>
+<span class="co">#&gt; 9 1004653188 1005845648 2015-03-07          2016-09-29       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]$TblDamBdate</span>
 <span class="co">#&gt; # A tibble: 2 x 4</span>
-<span class="co">#&gt;    `#IDTier`   IDMutter Birthdate.Tier Birthdate.Mutter</span>
-<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;          </span>
-<span class="co">#&gt; 1      99768      99765 1983-03-20     1985-02-26      </span>
-<span class="co">#&gt; 2 1000878464 1004910666 2015-03-05     2015-10-12      </span>
+<span class="co">#&gt;    `#IDTier`   IDMutter `Birthdate.#IDTier` Birthdate.IDMutter</span>
+<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;            </span>
+<span class="co">#&gt; 1      99768      99765 1983-03-20          1985-02-26        </span>
+<span class="co">#&gt; 2 1000878464 1004910666 2015-03-05          2015-10-12        </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]$TblSireEqID</span>
 <span class="co">#&gt; # A tibble: 0 x 9</span>
@@ -339,7 +365,19 @@
 <span class="co">#&gt; # A tibble: 1 x 9</span>
 <span class="co">#&gt;    `#IDTier`  IDVater  IDMutter Birthdate  Geschlecht   PLZ introg inb_gen  cryo</span>
 <span class="co">#&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 1004866450   9.99e8    1.00e9 2011-03-27 F           7411      0 NA          0</span></pre></body></html></div>
+<span class="co">#&gt; 1 1004866450   9.99e8    1.00e9 2011-03-27 F           7411      0 NA          0</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]$TblSireWrongSex</span>
+<span class="co">#&gt; # A tibble: 3 x 2</span>
+<span class="co">#&gt;      IDVater Geschlecht</span>
+<span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;     </span>
+<span class="co">#&gt; 1 1007737726 F         </span>
+<span class="co">#&gt; 2 1006000916 F         </span>
+<span class="co">#&gt; 3 1004668293 F         </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]$TblDamWrongSex</span>
+<span class="co">#&gt; # A tibble: 0 x 2</span>
+<span class="co">#&gt; # … with 2 variables: IDMutter &lt;dbl&gt;, Geschlecht &lt;chr&gt;</span></pre></body></html></div>
 </div>
 <div id="datatypes" class="section level1">
 <h1 class="hasAnchor">
@@ -410,7 +448,7 @@
 <span class="co">#&gt; Warning: `guess_max` is a very large value, setting to `21474836` to avoid</span>
 <span class="co">#&gt; exhausting memory</span>
 <span class="co">#&gt; $PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $l_dtype</span>
 <span class="co">#&gt; $l_dtype$col</span>
@@ -443,7 +481,7 @@
 <span class="co">#&gt; row col   expected actual</span>
 <span class="co">#&gt; 477  -- an integer      F</span>
 <span class="co">#&gt; $PedFile</span>
-<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/RtmpYzIaq3/temp_libpath104d7334447ea/qpdt/extdata/data_sample.csv"</span>
+<span class="co">#&gt; [1] "/private/var/folders/2v/jfsqj8zj2f122jcgy15nzfn00000gn/T/Rtmpn1cOGU/temp_libpath1769b2a27177a/qpdt/extdata/data_sample.csv"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ReqDType</span>
 <span class="co">#&gt; $ReqDType$col</span>

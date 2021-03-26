@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">qpdt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@
       <a href="articles/gs_pedigree_check.html">Checking Consistency of Animal Pedigrees</a>
     </li>
     <li>
+      <a href="articles/pedigree_check_report.html">Report Pedigree Checks</a>
+    </li>
+    <li>
       <a href="articles/pedigree_cycle_check.html">Check for Cycles in Pedigrees</a>
     </li>
   </ul>
@@ -68,7 +71,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/fbzwsqualitasag/qpdt/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -85,6 +95,7 @@
 <a href="#qpdt" class="anchor"></a>qpdt</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
+<p>The website of qpdt is available under <a href="https://fbzwsqualitasag.github.io/qpdt/" class="uri">https://fbzwsqualitasag.github.io/qpdt/</a></p>
 <p>The goal of qpdt is to provide a package with generic pedigree tools used at Qualitas AG.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -134,24 +145,24 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblSireBdate</span>
 <span class="co">#&gt; # A tibble: 9 x 4</span>
-<span class="co">#&gt;    `#IDTier`    IDVater Birthdate.Tier Birthdate.Vater</span>
-<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;         </span>
-<span class="co">#&gt; 1 1000810031 1000050624 2013-03-09     2013-05-02     </span>
-<span class="co">#&gt; 2  999870937 1000161006 2013-03-20     2013-10-08     </span>
-<span class="co">#&gt; 3 1000810027 1000050624 2013-03-25     2013-05-02     </span>
-<span class="co">#&gt; 4 1000813707 1000050624 2013-03-26     2013-05-02     </span>
-<span class="co">#&gt; 5 1000810038 1000050624 2013-03-26     2013-05-02     </span>
-<span class="co">#&gt; 6 1000810020 1000050624 2013-04-15     2013-05-02     </span>
-<span class="co">#&gt; 7 1000711443 1000050624 2013-04-15     2013-05-02     </span>
-<span class="co">#&gt; 8 1000456126 1005609568 2013-11-26     2016-02-02     </span>
-<span class="co">#&gt; 9 1004653188 1005845648 2015-03-07     2016-09-29     </span>
+<span class="co">#&gt;    `#IDTier`    IDVater `Birthdate.#IDTier` Birthdate.IDVater</span>
+<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;           </span>
+<span class="co">#&gt; 1 1000810031 1000050624 2013-03-09          2013-05-02       </span>
+<span class="co">#&gt; 2  999870937 1000161006 2013-03-20          2013-10-08       </span>
+<span class="co">#&gt; 3 1000810027 1000050624 2013-03-25          2013-05-02       </span>
+<span class="co">#&gt; 4 1000813707 1000050624 2013-03-26          2013-05-02       </span>
+<span class="co">#&gt; 5 1000810038 1000050624 2013-03-26          2013-05-02       </span>
+<span class="co">#&gt; 6 1000810020 1000050624 2013-04-15          2013-05-02       </span>
+<span class="co">#&gt; 7 1000711443 1000050624 2013-04-15          2013-05-02       </span>
+<span class="co">#&gt; 8 1000456126 1005609568 2013-11-26          2016-02-02       </span>
+<span class="co">#&gt; 9 1004653188 1005845648 2015-03-07          2016-09-29       </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblDamBdate</span>
 <span class="co">#&gt; # A tibble: 2 x 4</span>
-<span class="co">#&gt;    `#IDTier`   IDMutter Birthdate.Tier Birthdate.Mutter</span>
-<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;          </span>
-<span class="co">#&gt; 1      99768      99765 1983-03-20     1985-02-26      </span>
-<span class="co">#&gt; 2 1000878464 1004910666 2015-03-05     2015-10-12      </span>
+<span class="co">#&gt;    `#IDTier`   IDMutter `Birthdate.#IDTier` Birthdate.IDMutter</span>
+<span class="co">#&gt;        &lt;dbl&gt;      &lt;dbl&gt; &lt;date&gt;              &lt;date&gt;            </span>
+<span class="co">#&gt; 1      99768      99765 1983-03-20          1985-02-26        </span>
+<span class="co">#&gt; 2 1000878464 1004910666 2015-03-05          2015-10-12        </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $TblSireEqID</span>
 <span class="co">#&gt; # A tibble: 0 x 9</span>
@@ -163,7 +174,19 @@
 <span class="co">#&gt; # A tibble: 1 x 9</span>
 <span class="co">#&gt;    `#IDTier`  IDVater  IDMutter Birthdate  Geschlecht   PLZ introg inb_gen  cryo</span>
 <span class="co">#&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 1004866450   9.99e8    1.00e9 2011-03-27 F           7411      0 NA          0</span></pre></div>
+<span class="co">#&gt; 1 1004866450   9.99e8    1.00e9 2011-03-27 F           7411      0 NA          0</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $TblSireWrongSex</span>
+<span class="co">#&gt; # A tibble: 3 x 2</span>
+<span class="co">#&gt;      IDVater Geschlecht</span>
+<span class="co">#&gt;        &lt;dbl&gt; &lt;chr&gt;     </span>
+<span class="co">#&gt; 1 1007737726 F         </span>
+<span class="co">#&gt; 2 1006000916 F         </span>
+<span class="co">#&gt; 3 1004668293 F         </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $TblDamWrongSex</span>
+<span class="co">#&gt; # A tibble: 0 x 2</span>
+<span class="co">#&gt; # … with 2 variables: IDMutter &lt;dbl&gt;, Geschlecht &lt;chr&gt;</span></pre></div>
 <p>If you want to find whether a certain pedigree contains cycles the following statements provides an anser.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">s_pedi_path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">'extdata'</span>,<span class="st">'data_sample2.csv'</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">'qprppedigree'</span>)
 <span class="fu"><a href="reference/check_cycle_pedigree.html">check_cycle_pedigree</a></span>(<span class="kw">ps_pedig_path</span> <span class="kw">=</span> <span class="no">s_pedi_path</span>)
@@ -185,13 +208,22 @@
 <span class="co">#&gt; $HasCycle</span>
 <span class="co">#&gt; [1] FALSE</span></pre></div>
 <hr>
-<p><em>Latest Changes: 2021-03-03 17:27:32 (pvr)</em></p>
+<p><em>Latest Changes: 2021-03-26 09:27:55 (pvr)</em></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/fbzwsqualitasag/qpdt/">https://​github.com/​fbzwsqualitasag/​qpdt/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/fbzwsqualitasag/qpdt/issues">https://​github.com/​fbzwsqualitasag/​qpdt/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>

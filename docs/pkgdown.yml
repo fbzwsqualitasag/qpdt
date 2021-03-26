@@ -3,6 +3,7 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   gs_pedigree_check: gs_pedigree_check.html
+  pedigree_check_report: pedigree_check_report.html
   pedigree_cycle_check: pedigree_cycle_check.html
-last_built: 2021-03-03T16:34Z
+last_built: 2021-03-26T08:28Z
 

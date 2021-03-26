@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wrapper for log4r debug — qpdt_log_debug • qpdt</title>
+<title>Check Sex of a Parent — get_tbl_parent_sex_err • qpdt</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Wrapper for log4r debug — qpdt_log_debug" />
-<meta property="og:description" content="Wrapper for log4r debug" />
+<meta property="og:title" content="Check Sex of a Parent — get_tbl_parent_sex_err" />
+<meta property="og:description" content="Using inner_joins to determine sex of parents. Filter out the parents with
+the wrong sex. The result contains the ID of the animal, the parent and the
+wrong sex." />
 
 
 
@@ -129,41 +131,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Wrapper for log4r debug</h1>
-    <small class="dont-index">Source: <a href='https://github.com/fbzwsqualitasag/qpdt/blob/master/R/logger.R'><code>R/logger.R</code></a></small>
-    <div class="hidden name"><code>qpdt_log_debug.Rd</code></div>
+    <h1>Check Sex of a Parent</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fbzwsqualitasag/qpdt/blob/master/R/check_pedigree_parent.R'><code>R/check_pedigree_parent.R</code></a></small>
+    <div class="hidden name"><code>get_tbl_parent_sex_err.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Wrapper for log4r debug</p>
+    <p>Using inner_joins to determine sex of parents. Filter out the parents with
+the wrong sex. The result contains the ID of the animal, the parent and the
+wrong sex.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>qpdt_log_debug</span>(<span class='no'>plogger</span>, <span class='no'>ps_caller</span>, <span class='no'>ps_msg</span>)</pre>
+    <pre class="usage"><span class='fu'>get_tbl_parent_sex_err</span>(
+  <span class='no'>ptbl_pedigree</span>,
+  <span class='no'>psym_animal_id</span>,
+  <span class='no'>psym_parent_id</span>,
+  <span class='no'>psym_sex_col</span>,
+  <span class='no'>pvec_parent_by</span>,
+  <span class='no'>ps_wrong_sex</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>plogger</th>
-      <td><p>log4r logger object</p></td>
+      <th>ptbl_pedigree</th>
+      <td><p>tibble containing pedigree</p></td>
     </tr>
     <tr>
-      <th>ps_caller</th>
-      <td><p>function from which we are called</p></td>
+      <th>psym_animal_id</th>
+      <td><p>symbol for column header of animal ID</p></td>
     </tr>
     <tr>
-      <th>ps_msg</th>
-      <td><p>logging message</p></td>
+      <th>psym_parent_id</th>
+      <td><p>symbol for column header of parent ID</p></td>
+    </tr>
+    <tr>
+      <th>psym_sex_col</th>
+      <td><p>symbol for column header of sex</p></td>
+    </tr>
+    <tr>
+      <th>pvec_parent_by</th>
+      <td><p>vector used as by argument in join</p></td>
+    </tr>
+    <tr>
+      <th>ps_wrong_sex</th>
+      <td><p>value for the wrong sex</p></td>
     </tr>
     </table>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>qpdt_logger</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_qpdt_logger.html'>get_qpdt_logger</a></span>()
-<span class='fu'><a href='qpdt_log_level.html'>qpdt_log_level</a></span>(<span class='no'>qpdt_logger</span>, <span class='st'>'DEBUG'</span>)
-<span class='fu'>qpdt_log_debug</span>(<span class='no'>qpdt_logger</span>, <span class='st'>'Examples'</span>, <span class='st'>'test message'</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
