@@ -110,7 +110,7 @@ knitr::kable(tbl_parent_result)
 
 In case that there are pedigree records with inconsistent information concerning parents of animals, the respective records are shown in the table below.
 
-```{r, echo=FALSE, include=(nr_sire_incon_bd == 0)}
+```{r, echo=FALSE, results='asis', include=(nr_sire_incon_bd == 0)}
 cat("\n<!--\n")
 ```
 
@@ -120,7 +120,7 @@ The records with inconsistent birthdates between animals and sires are shown in 
 knitr::kable(l_parent_result$TblSireBdate)
 ```
 
-```{r, echo=FALSE, include=(nr_sire_incon_bd == 0)}
+```{r, echo=FALSE, results='asis', include=(nr_sire_incon_bd == 0)}
 cat("\n-->\n\n")
 ```
 
