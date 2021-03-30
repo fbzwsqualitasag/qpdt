@@ -96,6 +96,9 @@ nr_dam_incon_bd <- nrow(l_parent_result$TblDamBdate)
 # number of equal ids between parents and animals
 nr_sire_eqid <- nrow(l_parent_result$TblSireEqID)
 nr_dam_eqid <- nrow(l_parent_result$TblDamEqID)
+# number of parents with wrong sex
+nr_sire_wrongsex <- nrow(l_parent_result$TblSireWrongSex)
+nr_dam_wrongsex <- nrow(l_parent_result$TblDamWrongSex)
 tbl_parent_result <- tibble::tibble(Property = c('Animals with missing sires',
                                                  'Animals with missing dams',
                                                  'Sires not occuring as animals',
@@ -103,7 +106,9 @@ tbl_parent_result <- tibble::tibble(Property = c('Animals with missing sires',
                                                  'Sires with inconsistent birthdates',
                                                  'Dams with inconsistent birthdates',
                                                  'Sires with same ID as offspring',
-                                                 'Dams with same ID as offspring'),
+                                                 'Dams with same ID as offspring',
+                                                 'Sires with wrong sex',
+                                                 'Dams with wrong sex'),
                                     `Count Values` = c(l_parent_result$NrMissingSire,
                                                        l_parent_result$NrMissingDam,
                                                        l_parent_result$NrSireNotAnimal,
@@ -111,7 +116,9 @@ tbl_parent_result <- tibble::tibble(Property = c('Animals with missing sires',
                                                        nr_sire_incon_bd,
                                                        nr_dam_incon_bd,
                                                        nr_sire_eqid,
-                                                       nr_dam_eqid))
+                                                       nr_dam_eqid,
+                                                       nr_sire_wrongsex,
+                                                       nr_dam_wrongsex))
 knitr::kable(tbl_parent_result)
 ```
 
@@ -160,7 +167,6 @@ knitr::kable(l_parent_result$TblSireEqID)
 ```
 
 ```{r, echo=FALSE, results='asis', include=(nr_sire_eqid == 0)}
-# number of equal ids between sire and animals
 cat("\n-->\n\n")
 ```
 
@@ -176,7 +182,36 @@ knitr::kable(l_parent_result$TblDamEqID)
 ```
 
 ```{r, echo=FALSE, results='asis', include=(nr_dam_eqid == 0)}
-# number of equal ids between dam and animals
+cat("\n-->\n\n")
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_sire_wrongsex == 0)}
+# number sires with wrong sex
+cat("\n<!--\n")
+```
+
+The following __sires__ have the wrong sex.
+
+```{r, echo=FALSE}
+knitr::kable(l_parent_result$TblSireWrongSex)
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_sire_wrongsex == 0)}
+cat("\n-->\n\n")
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_dam_wrongsex == 0)}
+# number dams with wrong sex
+cat("\n<!--\n")
+```
+
+The following __dams__ have the wrong sex.
+
+```{r, echo=FALSE}
+knitr::kable(l_parent_result$TblDamWrongSex)
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_dam_wrongsex == 0)}
 cat("\n-->\n\n")
 ```
 
