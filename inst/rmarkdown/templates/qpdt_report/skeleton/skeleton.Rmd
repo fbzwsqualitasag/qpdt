@@ -90,31 +90,39 @@ l_parent_result <- qpdt::check_pedig_parent(ps_pedig_path = params$pedigreePath,
                                             ps_dam_col       = l_settings$dam_col,
                                             ps_bd_col        = l_settings$bd_col,
                                             ps_sex_col       = l_settings$sex_col)
-
+# number of inconsistent birthdates
 nr_sire_incon_bd <- nrow(l_parent_result$TblSireBdate)
 nr_dam_incon_bd <- nrow(l_parent_result$TblDamBdate)
-tbl_parent_result <- tibble::tibble(Property = c('Number of animals with missing sires',
-                                                 'Number of animals with missing dams',
-                                                 'Number of sires not occuring as animals',
-                                                 'Number of dams not occurding as animals',
-                                                 'Number of sires with inconsistent birthdates',
-                                                 'Number of dams with inconsistent birthdates'),
-                                    Value    = c(l_parent_result$NrMissingSire,
-                                                 l_parent_result$NrMissingDam,
-                                                 l_parent_result$NrSireNotAnimal,
-                                                 l_parent_result$NrDamNotAnimal,
-                                                 nr_sire_incon_bd,
-                                                 nr_dam_incon_bd))
+# number of equal ids between parents and animals
+nr_sire_eqid <- nrow(l_parent_result$TblSireEqID)
+nr_dam_eqid <- nrow(l_parent_result$TblDamEqID)
+tbl_parent_result <- tibble::tibble(Property = c('Animals with missing sires',
+                                                 'Animals with missing dams',
+                                                 'Sires not occuring as animals',
+                                                 'Dams not occurding as animals',
+                                                 'Sires with inconsistent birthdates',
+                                                 'Dams with inconsistent birthdates',
+                                                 'Sires with same ID as offspring',
+                                                 'Dams with same ID as offspring'),
+                                    `Count Values` = c(l_parent_result$NrMissingSire,
+                                                       l_parent_result$NrMissingDam,
+                                                       l_parent_result$NrSireNotAnimal,
+                                                       l_parent_result$NrDamNotAnimal,
+                                                       nr_sire_incon_bd,
+                                                       nr_dam_incon_bd,
+                                                       nr_sire_eqid,
+                                                       nr_dam_eqid))
 knitr::kable(tbl_parent_result)
 ```
 
 In case that there are pedigree records with inconsistent information concerning parents of animals, the respective records are shown in the table below.
 
 ```{r, echo=FALSE, results='asis', include=(nr_sire_incon_bd == 0)}
+# number of inconsistent birthdates with sires
 cat("\n<!--\n")
 ```
 
-The records with inconsistent birthdates between animals and sires are shown in the table below.
+The records with inconsistent birthdates between animals and __sires__ are shown in the table below.
 
 ```{r echo=FALSE}
 knitr::kable(l_parent_result$TblSireBdate)
@@ -126,16 +134,49 @@ cat("\n-->\n\n")
 
 
 ```{r, echo=FALSE, results='asis', include=(nr_dam_incon_bd == 0)}
+# number of inconsistent birthdates with dams
 cat("\n<!--\n")
 ```
 
-The records with inconsistent birthdates between animals and dams are shown in the table below.
+The records with inconsistent birthdates between animals and __dams__ are shown in the table below.
 
 ```{r echo=FALSE}
 knitr::kable(l_parent_result$TblDamBdate)
 ```
 
 ```{r, echo=FALSE, results='asis', include=(nr_dam_incon_bd == 0)}
+cat("\n-->\n\n")
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_sire_eqid == 0)}
+# number of equal ids between sire and animals
+cat("\n<!--\n")
+```
+
+The following animals have the same ID as their __sires__.
+
+```{r, echo=FALSE}
+knitr::kable(l_parent_result$TblSireEqID)
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_sire_eqid == 0)}
+# number of equal ids between sire and animals
+cat("\n-->\n\n")
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_dam_eqid == 0)}
+# number of equal ids between dam and animals
+cat("\n<!--\n")
+```
+
+The following animals have the same ID as their __dams__.
+
+```{r, echo=FALSE}
+knitr::kable(l_parent_result$TblDamEqID)
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_dam_eqid == 0)}
+# number of equal ids between dam and animals
 cat("\n-->\n\n")
 ```
 
