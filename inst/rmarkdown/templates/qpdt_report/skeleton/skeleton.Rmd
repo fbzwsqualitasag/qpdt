@@ -91,15 +91,37 @@ l_parent_result <- qpdt::check_pedig_parent(ps_pedig_path = params$pedigreePath,
                                             ps_bd_col        = l_settings$bd_col,
                                             ps_sex_col       = l_settings$sex_col)
 
+nr_sire_incon_bd <- nrow(l_parent_result$TblSireBdate)
+nr_dam_incon_bd <- nrow(l_parent_result$TblDamBdate)
 tbl_parent_result <- tibble::tibble(Property = c('Number of animals with missing sires',
                                                  'Number of animals with missing dams',
                                                  'Number of sires not occuring as animals',
-                                                 'Number of dams not occurding as animals'),
+                                                 'Number of dams not occurding as animals',
+                                                 'Number of sires with inconsistent birthdates',
+                                                 'Number of dams with inconsistent birthdates'),
                                     Value    = c(l_parent_result$NrMissingSire,
                                                  l_parent_result$NrMissingDam,
                                                  l_parent_result$NrSireNotAnimal,
-                                                 l_parent_result$NrDamNotAnimal))
+                                                 l_parent_result$NrDamNotAnimal,
+                                                 nr_sire_incon_bd,
+                                                 nr_dam_incon_bd))
 knitr::kable(tbl_parent_result)
+```
+
+In case that there are pedigree records with inconsistent information concerning parents of animals, the respective records are shown in the table below.
+
+```{r, echo=FALSE, include=(nr_sire_incon_bd == 0)}
+cat("\n<!--\n")
+```
+
+The records with inconsistent birthdates between animals and sires are shown in the table below.
+
+```{r echo=FALSE}
+knitr::kable(l_parent_result$TblSireBdate)
+```
+
+```{r, echo=FALSE, include=(nr_sire_incon_bd == 0)}
+cat("\n-->\n\n")
 ```
 
 
