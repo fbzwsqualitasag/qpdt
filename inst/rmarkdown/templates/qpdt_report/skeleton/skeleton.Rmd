@@ -129,6 +129,7 @@ In case that there are pedigree records with inconsistent information concerning
 cat("\n<!--\n")
 ```
 
+## Inconsistent Birthdates for Sires
 The records with inconsistent birthdates between animals and __sires__ are shown in the table below.
 
 ```{r echo=FALSE}
@@ -145,6 +146,7 @@ cat("\n-->\n\n")
 cat("\n<!--\n")
 ```
 
+## Inconsistent Birthdates for Dams
 The records with inconsistent birthdates between animals and __dams__ are shown in the table below.
 
 ```{r echo=FALSE}
@@ -160,6 +162,7 @@ cat("\n-->\n\n")
 cat("\n<!--\n")
 ```
 
+## Inconsistent IDs of Sires and Offspring
 The following animals have the same ID as their __sires__.
 
 ```{r, echo=FALSE}
@@ -175,6 +178,7 @@ cat("\n-->\n\n")
 cat("\n<!--\n")
 ```
 
+## Inconsistent IDs of Dams and Offspring
 The following animals have the same ID as their __dams__.
 
 ```{r, echo=FALSE}
@@ -190,6 +194,7 @@ cat("\n-->\n\n")
 cat("\n<!--\n")
 ```
 
+## Sires with wrong sex
 The following __sires__ have the wrong sex.
 
 ```{r, echo=FALSE}
@@ -205,6 +210,7 @@ cat("\n-->\n\n")
 cat("\n<!--\n")
 ```
 
+## Dams with wrong sex
 The following __dams__ have the wrong sex.
 
 ```{r, echo=FALSE}
