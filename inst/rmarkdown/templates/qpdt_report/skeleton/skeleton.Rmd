@@ -125,6 +125,21 @@ cat("\n-->\n\n")
 ```
 
 
+```{r, echo=FALSE, results='asis', include=(nr_dam_incon_bd == 0)}
+cat("\n<!--\n")
+```
+
+The records with inconsistent birthdates between animals and dams are shown in the table below.
+
+```{r echo=FALSE}
+knitr::kable(l_parent_result$TblDamBdate)
+```
+
+```{r, echo=FALSE, results='asis', include=(nr_dam_incon_bd == 0)}
+cat("\n-->\n\n")
+```
+
+
 ```{r latest-change, echo=FALSE, results='asis'}
 cat("\n\n---\n", "_Latest Changes: ", format(Sys.time(), format = "%Y-%m-%d %H:%M:%S"), " (", Sys.info()[['user']], ")_")
 ```
