@@ -53,6 +53,29 @@ l_pedig_id_result <- qpdt::check_pedig_id(ps_pedig_path = params$pedigreePath,
                                           ps_delim      = l_settings$col_delim)
 # number of duplicates
 n_nr_dupl <- ifelse(is.null(l_pedig_id_result$TblDuplicates), 0, nrow(l_pedig_id_result$TblDuplicates))
+# get the results for the data type check
+l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
+# number of data type mismatches
+n_nr_mismatch <- sum(l_dtp_check_result$ReqDType$dtp != l_dtp_check_result$CurDType$dtp)
+
+if (n_nr_mismatch == 0){
+  l_parent_result <- qpdt::check_pedig_parent(ps_pedig_path = params$pedigreePath,
+                                              ps_id_col        = l_settings$id_col,
+                                              ps_sire_col      = l_settings$sire_col,
+                                              ps_dam_col       = l_settings$dam_col,
+                                              ps_bd_col        = l_settings$bd_col,
+                                              ps_sex_col       = l_settings$sex_col)
+  # number of inconsistent birthdates
+  nr_sire_incon_bd <- nrow(l_parent_result$TblSireBdate)
+  nr_dam_incon_bd <- nrow(l_parent_result$TblDamBdate)
+  # number of equal ids between parents and animals
+  nr_sire_eqid <- nrow(l_parent_result$TblSireEqID)
+  nr_dam_eqid <- nrow(l_parent_result$TblDamEqID)
+  # number of parents with wrong sex
+  nr_sire_wrongsex <- nrow(l_parent_result$TblSireWrongSex)
+  nr_dam_wrongsex <- nrow(l_parent_result$TblDamWrongSex)
+  
+}
 
 ```
 
@@ -62,9 +85,17 @@ The following table gives an overview of the reported pedigree checks.
 
 ```{r summary-table, echo=FALSE, results='asis'}
 tbl_summary <- tibble::tibble(Property = c("Pedigree Input File",
-                                           "Number of duplicate IDs"),
-                              Value    = c(l_pedig_id_result$PedFile,
-                                           n_nr_dupl))
+                                           "Number of duplicate IDs",
+                                           "Number of data type mismatches",
+                                           "Number of birthdate inconsistencies",
+                                           "Number of equal IDs",
+                                           "Number of parents with wrong sex"),
+                              Value    = c(basename(l_pedig_id_result$PedFile),
+                                           n_nr_dupl,
+                                           n_nr_mismatch,
+                                           nr_sire_incon_bd+nr_dam_incon_bd,
+                                           nr_sire_eqid+nr_dam_eqid,
+                                           nr_sire_wrongsex+nr_dam_wrongsex))
 knitr::kable(tbl_summary)
 ```
 
@@ -104,10 +135,6 @@ The pedigree contains __`r paste0(n_nr_dupl, ' duplicate ID', ifelse(n_nr_dupl !
 Entries in the same column must all be of a certain data type. The data type can either be specified at reading time or it is automatically determined when reading the pedigree from the file. The determined data types are then compared to the required data types specified as input. The following table compares the required data types to the data types found in the input file.
 
 ```{r data-type-check, echo=FALSE, message=FALSE, warning=FALSE}
-# get the results for the data type check
-l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
-# number of data type mismatches
-n_nr_mismatch <- sum(l_dtp_check_result$ReqDType$dtp != l_dtp_check_result$CurDType$dtp)
 # get the number of parse problems
 n_nr_parse_problem <- ifelse(is.null(l_dtp_check_result$DTypeProblems), 0, nrow(l_dtp_check_result$DTypeProblems))
 # create table with comparison of data types
@@ -156,21 +183,6 @@ Parents of animals must fullfill certain properties. The following properties ar
 The following table shows the numbers of all the checked properties.
 
 ```{r parent-check, echo=FALSE, message=FALSE, warning=FALSE}
-l_parent_result <- qpdt::check_pedig_parent(ps_pedig_path = params$pedigreePath,
-                                            ps_id_col        = l_settings$id_col,
-                                            ps_sire_col      = l_settings$sire_col,
-                                            ps_dam_col       = l_settings$dam_col,
-                                            ps_bd_col        = l_settings$bd_col,
-                                            ps_sex_col       = l_settings$sex_col)
-# number of inconsistent birthdates
-nr_sire_incon_bd <- nrow(l_parent_result$TblSireBdate)
-nr_dam_incon_bd <- nrow(l_parent_result$TblDamBdate)
-# number of equal ids between parents and animals
-nr_sire_eqid <- nrow(l_parent_result$TblSireEqID)
-nr_dam_eqid <- nrow(l_parent_result$TblDamEqID)
-# number of parents with wrong sex
-nr_sire_wrongsex <- nrow(l_parent_result$TblSireWrongSex)
-nr_dam_wrongsex <- nrow(l_parent_result$TblDamWrongSex)
 tbl_parent_result <- tibble::tibble(Property = c('Animals with missing sires',
                                                  'Animals with missing dams',
                                                  'Sires not occuring as animals',
