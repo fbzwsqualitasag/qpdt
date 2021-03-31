@@ -75,6 +75,17 @@ if (n_nr_mismatch == 0){
   nr_sire_wrongsex <- nrow(l_parent_result$TblSireWrongSex)
   nr_dam_wrongsex <- nrow(l_parent_result$TblDamWrongSex)
   
+  # checking loops
+  l_loop_check_result <- NULL
+  if (params$checkLoop == 'yes'){
+    l_loop_check_result <- qpdt::check_cycle_pedigree(ps_pedig_path = params$pedigreePath,
+                                                      pb_report_cycle = TRUE,
+                                                      pn_id_col = l_settings$id_col_idx,
+                                                      pn_sire_col = l_settings$sire_col_idx,
+                                                      pn_dam_col = l_settings$dam_col_idx)
+        
+  }
+
 }
 
 ```
@@ -89,13 +100,15 @@ tbl_summary <- tibble::tibble(Property = c("Pedigree Input File",
                                            "Number of data type mismatches",
                                            "Number of birthdate inconsistencies",
                                            "Number of equal IDs",
-                                           "Number of parents with wrong sex"),
+                                           "Number of parents with wrong sex",
+                                           "Has Pedigree Cycles"),
                               Value    = c(basename(l_pedig_id_result$PedFile),
                                            n_nr_dupl,
                                            n_nr_mismatch,
                                            nr_sire_incon_bd+nr_dam_incon_bd,
                                            nr_sire_eqid+nr_dam_eqid,
-                                           nr_sire_wrongsex+nr_dam_wrongsex))
+                                           nr_sire_wrongsex+nr_dam_wrongsex,
+                                           ifelse(is.null(l_loop_check_result), NA, l_loop_check_result$HasCycle)))
 knitr::kable(tbl_summary)
 ```
 
@@ -314,11 +327,6 @@ cat("\n<!--\n")
 Pedigrees can be represented as directed acyclic graphs (DAG) and as such they must not contain any loops. In the context of a pedigree, a loop is a path of recursive parent-offspring relationships where an animal occurs more than once. The following table contains the result whether the given pedigree contains a loop.
 
 ```{r loop-check, eval=(params$checkLoop == 'yes'), echo=FALSE, results='asis', message=FALSE, warning=FALSE}
-l_loop_check_result <- qpdt::check_cycle_pedigree(ps_pedig_path = params$pedigreePath,
-                                                  pb_report_cycle = TRUE,
-                                                  pn_id_col = l_settings$id_col_idx,
-                                                  pn_sire_col = l_settings$sire_col_idx,
-                                                  pn_dam_col = l_settings$dam_col_idx)
 tbl_loop_result <- tibble::tibble(Pedigree = c('Input File',
                                                'Has Cycles'),
                                   Value = c(l_loop_check_result$PedFile,
