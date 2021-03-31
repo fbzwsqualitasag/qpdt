@@ -86,7 +86,7 @@ Entries in the same column must all be of a certain data type. The data type can
 # get the results for the data type check
 l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
 # get the number of parse problems
-n_nr_parse_problem <- nrow(l_dtp_check_result$DTypeProblems)
+n_nr_parse_problem <- ifelse(is.null(l_dtp_check_result$DTypeProblems), 0, nrow(l_dtp_check_result$DTypeProblems))
 # create table with comparison of data types
 tbl_datatypes <- tibble::tibble(Column = l_settings$l_dtype$col,
                                 `Required Data Type` = l_settings$l_dtype$dtp,
