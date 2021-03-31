@@ -72,6 +72,44 @@ In case the above check found some duplicate identifiers, they are shown in the 
 ```
 
 
+# Data Types
+Entries in the same column must all be of a certain data type. The data type can either be specified at reading time or it is automatically determined when reading the pedigree from the file. The determined data types are then compared to the required data types specified as input. The following table compares the required data types to the data types found in the input file.
+
+```{r echo=FALSE}
+# get the results for the data type check
+l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
+# get the number of parse problems
+n_nr_parse_problem <- nrow(l_dtp_check_result$DTypeProblems)
+# create table with comparison of data types
+tbl_datatypes <- tibble::tibble(Column = l_settings$l_dtype$col,
+                                `Required Data Type` = l_settings$l_dtype$dtp,
+                                `Found Data Type`    = l_dtp_check_result$CurDType$dtp)
+knitr::kable(tbl_datatypes)
+```
+
+In case where mismatches between the required data types and the ones found in the input file were found, the respective parse problems are shown in the table below.
+
+```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
+cat("\n<!--\n")
+```
+
+## Pedigree Input Parse Problems
+The following table shows problems when parsing the pedigree input file.
+
+```{r echo=FALSE}
+knitr::kable(l_dtp_check_result$DTypeProblems)
+```
+
+```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
+cat("\n-->\n\n")
+```
+
+```{r echo=FALSE}
+# in case where parse problems were found, the following junks can no longer be evaluated
+knitr::opts_chunk$set(eval = (n_nr_parse_problem == 0))
+```
+
+
 # Parents
 Parents of animals must fullfill certain properties. The following properties are checked
 
@@ -220,41 +258,6 @@ knitr::kable(l_parent_result$TblDamWrongSex)
 ```{r, echo=FALSE, results='asis', include=(nr_dam_wrongsex == 0)}
 cat("\n-->\n\n")
 ```
-
-
-# Data Types
-Entries in the same column must all be of a certain data type. The data type can either be specified at reading time or it is automatically determined when reading the pedigree from the file. The determined data types are then compared to the required data types specified as input. The following table compares the required data types to the data types found in the input file.
-
-```{r echo=FALSE}
-# get the results for the data type check
-l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
-# get the number of parse problems
-n_nr_parse_problem <- nrow(l_dtp_check_result$DTypeProblems)
-# create table with comparison of data types
-tbl_datatypes <- tibble::tibble(Column = l_settings$l_dtype$col,
-                                `Required Data Type` = l_settings$l_dtype$dtp,
-                                `Found Data Type`    = l_dtp_check_result$CurDType$dtp)
-knitr::kable(tbl_datatypes)
-```
-
-In case where mismatches between the required data types and the ones found in the input file were found, the respective parse problems are shown in the table below.
-
-```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
-cat("\n<!--\n")
-```
-
-## Pedigree Input Parse Problems
-The following table shows problems when parsing the pedigree input file.
-
-```{r echo=FALSE}
-knitr::kable(l_dtp_check_result$DTypeProblems)
-```
-
-```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
-cat("\n-->\n\n")
-```
-
-
 
 
 ```{r latest-change, echo=FALSE, results='asis'}
