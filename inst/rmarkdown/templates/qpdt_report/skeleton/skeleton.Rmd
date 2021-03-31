@@ -82,7 +82,7 @@ In case the above check found some duplicate identifiers, they are shown in the 
 # Data Types
 Entries in the same column must all be of a certain data type. The data type can either be specified at reading time or it is automatically determined when reading the pedigree from the file. The determined data types are then compared to the required data types specified as input. The following table compares the required data types to the data types found in the input file.
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # get the results for the data type check
 l_dtp_check_result <- qpdt::check_pedigree_datatypes(ps_pedig_path = params$pedigreePath, pl_dtype = l_settings$l_dtype)
 # get the number of parse problems
