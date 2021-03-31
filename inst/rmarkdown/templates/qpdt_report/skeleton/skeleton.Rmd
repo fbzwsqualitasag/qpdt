@@ -301,7 +301,7 @@ cat("\n<!--\n")
 # Loops
 Pedigrees can be represented as directed acyclic graphs (DAG) and as such they must not contain any loops. In the context of a pedigree, a loop is a path of recursive parent-offspring relationships where an animal occurs more than once. The following table contains the result whether the given pedigree contains a loop.
 
-```{r loop-check, echo=FALSE, results='asis', message=FALSE, warning=FALSE}
+```{r loop-check, eval=(params$checkLoop == 'yes'), echo=FALSE, results='asis', message=FALSE, warning=FALSE}
 l_loop_check_result <- qpdt::check_cycle_pedigree(ps_pedig_path = params$pedigreePath,
                                                   pb_report_cycle = TRUE,
                                                   pn_id_col = l_settings$id_col_idx,
