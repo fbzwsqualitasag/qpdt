@@ -7,8 +7,8 @@
 create_pedigree_report(
   ps_pedigree_path,
   ps_report_outdir = ".",
-  ps_report_rmd = paste0(format(Sys.time(), "\%Y\%m\%d\%H\%M\%S"),
-    "_qpdt_pedigree_report.Rmd", collapse = ""),
+  ps_report_rmd = paste0(format(Sys.time(), "\%Y\%m\%d\%H\%M\%S"), "_",
+    basename(ps_pedigree_path), "_qpdt_pedigree_report.Rmd", collapse = ""),
   pl_params = NULL
 )
 }
