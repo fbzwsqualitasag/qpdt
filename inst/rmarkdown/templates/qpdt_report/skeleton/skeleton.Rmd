@@ -316,7 +316,7 @@ knitr::kable(tbl_loop_result)
 
 `r if(exists("l_loop_check_result") && l_loop_check_result$HasCycle){"The pedigree contains loops. The animals that constitute the loop are shown in the table below."}else{"The pedigree does not contain any loops."}`
 
-```{r echo=FALSE, results='asis', include=exists("l_loop_check_result") && l_loop_check_result$HasCycle}
+```{r cycle-table, eval=(params$checkLoop == 'yes'), echo=FALSE, results='asis', include=exists("l_loop_check_result") && l_loop_check_result$HasCycle}
 knitr::kable(l_loop_check_result$TblCycle)
 ```
 
