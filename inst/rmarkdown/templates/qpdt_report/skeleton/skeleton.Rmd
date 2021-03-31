@@ -96,7 +96,7 @@ tbl_datatypes <- tibble::tibble(Column = l_settings$l_dtype$col,
 knitr::kable(tbl_datatypes)
 ```
 
-The comparison between the required and the number of found data types resulted in __`r paste0(n_nr_mismatch, ' mismatch', ifelse(n_nr_mismath != 1, 'es', ''), collapse = '')`__. `r if(n_nr_mismath > 0) "In case where mismatches could be found, the respective parse problems are shown in the table below."`
+The comparison between the required and the number of found data types resulted in __`r paste0(n_nr_mismatch, ' mismatch', ifelse(n_nr_mismatch != 1, 'es', ''), collapse = '')`__. `r if(n_nr_mismatch > 0) "In case where mismatches could be found, the respective parse problems are shown in the table below."`
 
 ```{r, echo=FALSE, results='asis', include=(n_nr_parse_problem == 0)}
 cat("\n<!--\n")
