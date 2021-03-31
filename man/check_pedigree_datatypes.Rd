@@ -46,4 +46,5 @@ check_pedigree_datatypes(ps_pedig_path = system.file('extdata',
   package = 'qprppedigree'))
 }
 
+
 }

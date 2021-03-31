@@ -14,7 +14,10 @@ get_generic_settings(
   ps_introg_col = "introg",
   ps_inb_col = "inb_gen",
   ps_cryo_col = "cryo",
-  ps_col_delim = "|"
+  ps_col_delim = "|",
+  pl_dtype = list(col = c("idanimal", "idsire", "iddam", "birthdate", "sex", "plz",
+    "introg", "inb_gen", "cryo"), dtp = c("integer", "character", "integer", "date",
+    "character", "integer", "double", "double", "logical"))
 )
 }
 \arguments{
@@ -37,6 +40,8 @@ get_generic_settings(
 \item{ps_cryo_col}{column header for cryo conservation}
 
 \item{ps_col_delim}{column delimiter}
+
+\item{pl_dtype}{list with datatypes}
 }
 \description{
 All input parameters that change with the type of pedigree are

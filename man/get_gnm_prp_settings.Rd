@@ -14,7 +14,10 @@ get_gnm_prp_settings(
   ps_introg_col = "introg",
   ps_inb_col = "inb_gen",
   ps_cryo_col = "cryo",
-  ps_col_delim = "|"
+  ps_col_delim = "|",
+  pl_dtype = list(col = c("#animal", "sire", "dam", "birth_date", "sex", "plz",
+    "introg", "inb_gen", "cryo"), dtp = c("integer", "integer", "integer", "date",
+    "character", "integer", "double", "logical", "logical"))
 )
 }
 \arguments{
@@ -37,6 +40,8 @@ get_gnm_prp_settings(
 \item{ps_cryo_col}{column header for cryo conservation}
 
 \item{ps_col_delim}{column delimiter}
+
+\item{pl_dtype}{list with datatypes}
 }
 \description{
 All input parameters that change with the type of pedigree are

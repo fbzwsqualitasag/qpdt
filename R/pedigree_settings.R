@@ -16,6 +16,7 @@
 #' @param ps_inb_col column header for inbreeding
 #' @param ps_cryo_col column header for cryo conservation
 #' @param ps_col_delim column delimiter
+#' @param pl_dtype list with datatypes
 #'
 #' @export get_gnm_prp_settings
 get_gnm_prp_settings <- function(ps_id_col     = '#animal',
@@ -27,7 +28,9 @@ get_gnm_prp_settings <- function(ps_id_col     = '#animal',
                                  ps_introg_col = 'introg',
                                  ps_inb_col    = 'inb_gen',
                                  ps_cryo_col   = 'cryo',
-                                 ps_col_delim  = '|'){
+                                 ps_col_delim  = '|',
+                                 pl_dtype      = list(col = c('#animal', 'sire', 'dam', 'birth_date', 'sex', 'plz', 'introg', 'inb_gen', 'cryo'),
+                                                      dtp = c('integer', 'integer', 'integer', 'date', 'character', 'integer', 'double', 'logical', 'logical') )){
   return(list(id_col     = ps_id_col,
               sire_col   = ps_sire_col,
               dam_col    = ps_dam_col,
@@ -37,7 +40,8 @@ get_gnm_prp_settings <- function(ps_id_col     = '#animal',
               introg_col = ps_introg_col,
               inb_col    = ps_inb_col,
               cryo_col   = ps_cryo_col,
-              col_delim  = ps_col_delim))
+              col_delim  = ps_col_delim,
+              l_dtype    = pl_dtype))
 }
 
 ## --- Settings for ARGUS Popreport Pedigrees ----------------------------------
@@ -58,6 +62,7 @@ get_gnm_prp_settings <- function(ps_id_col     = '#animal',
 #' @param ps_inb_col column header for inbreeding
 #' @param ps_cryo_col column header for cryo conservation
 #' @param ps_col_delim column delimiter
+#' @param pl_dtype list with datatypes
 #'
 #' @export get_argus_prp_settings
 get_argus_prp_settings <- function(ps_id_col     = '#IDTier',
@@ -69,7 +74,9 @@ get_argus_prp_settings <- function(ps_id_col     = '#IDTier',
                                    ps_introg_col = 'introg',
                                    ps_inb_col    = 'inb_gen',
                                    ps_cryo_col   = 'cryo',
-                                   ps_col_delim  = '|'){
+                                   ps_col_delim  = '|',
+                                   pl_dtype      = list(col = c('#IDTier', 'IDVater', 'IDMutter', 'Birthdate', 'Geschlecht', 'PLZ', 'introg', 'inb_gen', 'cryo'),
+                                                        dtp = c('integer', 'integer', 'integer', 'date', 'character', 'integer', 'double', 'logical', 'integer'))){
   return(list(id_col     = ps_id_col,
               sire_col   = ps_sire_col,
               dam_col    = ps_dam_col,
@@ -79,7 +86,8 @@ get_argus_prp_settings <- function(ps_id_col     = '#IDTier',
               introg_col = ps_introg_col,
               inb_col    = ps_inb_col,
               cryo_col   = ps_cryo_col,
-              col_delim  = ps_col_delim))
+              col_delim  = ps_col_delim,
+              l_dtype    = pl_dtype))
 }
 
 ## --- Settings For Generic Pedigree Type ----------------------------------
@@ -100,6 +108,7 @@ get_argus_prp_settings <- function(ps_id_col     = '#IDTier',
 #' @param ps_inb_col column header for inbreeding
 #' @param ps_cryo_col column header for cryo conservation
 #' @param ps_col_delim column delimiter
+#' @param pl_dtype list with datatypes
 #'
 #' @export get_generic_settings
 get_generic_settings <- function(ps_id_col     = 'id',
@@ -111,7 +120,9 @@ get_generic_settings <- function(ps_id_col     = 'id',
                                  ps_introg_col = 'introg',
                                  ps_inb_col    = 'inb_gen',
                                  ps_cryo_col   = 'cryo',
-                                 ps_col_delim  = '|'){
+                                 ps_col_delim  = '|',
+                                 pl_dtype      = list(col = c('idanimal', 'idsire', 'iddam', 'birthdate', 'sex', 'plz', 'introg', 'inb_gen', 'cryo'),
+                                                      dtp = c('integer', 'character', 'integer', 'date', 'character', 'integer', 'double', 'double', 'logical'))){
   return(list(id_col     = ps_id_col,
               sire_col   = ps_sire_col,
               dam_col    = ps_dam_col,
@@ -121,7 +132,8 @@ get_generic_settings <- function(ps_id_col     = 'id',
               introg_col = ps_introg_col,
               inb_col    = ps_inb_col,
               cryo_col   = ps_cryo_col,
-              col_delim  = ps_col_delim))
+              col_delim  = ps_col_delim,
+              l_dtype    = pl_dtype))
 }
 
 

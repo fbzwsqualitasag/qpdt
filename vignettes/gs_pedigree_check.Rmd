@@ -174,7 +174,14 @@ The check can now be run by
 
 ```{r, message=FALSE}
 l_dtype <- l_ped_dt_result$l_dtype
-l_dtype$dtp[which(l_dtype$col == "sire")] <- "integer"
 (l_dtp_check_result <- check_pedigree_datatypes(ps_pedig_path = vec_ped_path[1], pl_dtype = l_dtype))
+```
+
+Using the corrected version of this pedigree results in the following check
+
+```{r, message=FALSE}
+(l_ped_dt_result <- get_pedigree_datatypes(ps_pedig_path = vec_ped_path[2]))
+l_dtype <- l_ped_dt_result$l_dtype
+(l_dtp_check_result <- check_pedigree_datatypes(ps_pedig_path = vec_ped_path[2], pl_dtype = l_dtype))
 ```
 

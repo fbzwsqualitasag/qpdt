@@ -28,15 +28,6 @@
 #'   package = 'qprppedigree'))
 #' }
 #'
-#' @importFrom readr parse_character
-#' @importFrom readr parse_date
-#' @importFrom readr parse_datetime
-#' @importFrom readr parse_double
-#' @importFrom readr parse_factor
-#' @importFrom readr parse_integer
-#' @importFrom readr parse_logical
-#' @importFrom readr parse_number
-#' @importFrom readr parse_time
 #'
 #' @export check_pedigree_datatypes
 check_pedigree_datatypes <- function(ps_pedig_path,
@@ -51,6 +42,17 @@ check_pedigree_datatypes <- function(ps_pedig_path,
   } else {
     tbl_pedigree <- ptbl_pedigree
   }
+
+  # define local wrappers to run do.call() on generated function name
+  parse_integer <- function(x, ...) readr::parse_integer(x, ...)
+  parse_character <- function(x, ...) readr::parse_character(x, ...)
+  parse_date <- function(x, ...) readr::parse_date(x, ...)
+  parse_datetime <- function(x, ...) readr::parse_datetime(x, ...)
+  parse_double <- function(x, ...) readr::parse_double(x, ...)
+  parse_factor <- function(x, ...) readr::parse_factor(x, ...)
+  parse_logical <- function(x, ...) readr::parse_logical(x, ...)
+  parse_number <- function(x, ...) readr::parse_number(x, ...)
+  parse_time <- function(x, ...) readr::parse_time(x, ...)
 
   # check that all columns specified in pl_dtype$col are valid columnnames of tbl_pedigree
   vec_ped_colnames <- colnames(tbl_pedigree)
@@ -70,8 +72,8 @@ check_pedigree_datatypes <- function(ps_pedig_path,
     # check whether s_cur_col_parser corresponds to the required datatype
     if (s_cur_col_parser != pl_dtype$dtp[idx]){
       # find the record with problems
-      parfun <- match.fun(paste('parse_', pl_dtype$dtp[idx], sep = ''))
-      par_result <- parfun(tbl_pedigree[[pl_dtype$col[idx]]])
+      fun.name <- paste('parse_', pl_dtype$dtp[idx], sep = '')
+      par_result <- do.call(fun.name, args = list(tbl_pedigree[[pl_dtype$col[idx]]]))
       # extract problems
       tbl_cur_problems <- readr::problems(par_result)
       # add pedigree column name
@@ -124,17 +126,23 @@ get_pedigree_datatypes <- function(ps_pedig_path,
                                    ptbl_pedigree    = NULL){
   # check whether pedigree must be read
   if (is.null(ptbl_pedigree)){
-    tbl_pedigree <- read_prp_pedigree(ps_pedig_path = ps_pedig_path, ps_delim = ps_delim, pcol_types = pcol_types)
+    tbl_pedigree <- read_prp_pedigree(ps_pedig_path = ps_pedig_path,
+                                      ps_delim = ps_delim,
+                                      pcol_types = pcol_types)
   } else {
     tbl_pedigree <- ptbl_pedigree
   }
   # obtain the column types in tbl_pedigree
   vec_ped_col <- colnames(tbl_pedigree)
   # obtain datatypes via guess_parser
-  vec_ped_dtp <- sapply(vec_ped_col, function(x) readr::guess_parser(tbl_pedigree[[x]], guess_integer = TRUE), USE.NAMES = FALSE)
+  vec_ped_dtp <- sapply(vec_ped_col,
+                        function(x) readr::guess_parser(tbl_pedigree[[x]],
+                                                        guess_integer = TRUE),
+                        USE.NAMES = FALSE)
   # return result
   return(list(PedFile         = ps_pedig_path,
               l_dtype         = list(col = vec_ped_col,
                                      dtp = vec_ped_dtp)))
 
 }
+
