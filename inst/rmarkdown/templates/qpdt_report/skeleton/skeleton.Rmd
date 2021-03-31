@@ -72,7 +72,7 @@ tbl_uni_id <- tibble::tibble(Property = c('Number of records',
 knitr::kable(tbl_uni_id)
 ```
 
-The pedigree contains __`r paste0(n_nr_dupl, ' duplicate ID', ifelse(n_nr_dupl>0, 's', ''), '.', collapse = '')`__. `r if (n_nr_dupl > 0) "In case the above check found some duplicate identifiers, they are shown in the table below."`
+The pedigree contains __`r paste0(n_nr_dupl, ' duplicate ID', ifelse(n_nr_dupl != 1, 's', ''), collapse = '')`__. `r if (n_nr_dupl > 0) "In case the above check found some duplicate identifiers, they are shown in the table below."`
 
 ```{r echo=FALSE, include=(n_nr_dupl > 0)}
  knitr::kable(l_pedig_id_result$TblDuplicates)
