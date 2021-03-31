@@ -64,7 +64,7 @@ check_pedigree_datatypes <- function(ps_pedig_path,
   l_ped_dt_result <- get_pedigree_datatypes(ps_pedig_path = ps_pedig_path,
                                             ps_delim      = ps_delim,
                                             pcol_types    = pcol_types,
-                                            ptbl_pedigree = ptbl_pedigree)
+                                            ptbl_pedigree = tbl_pedigree)
 
   for (idx in seq_along(pl_dtype$col)){
     # determine datatype of current column
