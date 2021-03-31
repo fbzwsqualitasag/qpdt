@@ -270,7 +270,7 @@ knitr::kable(l_parent_result$TblDamWrongSex)
 cat("\n-->\n\n")
 ```
 
-```{r, eval=TRUE, echo=FALSE, include=(n_nr_parse_problem != 0)}
+```{r, eval=TRUE, echo=FALSE, results='asis', include=(n_nr_parse_problem != 0)}
 cat("\n-->\n\n")
 ```
 
