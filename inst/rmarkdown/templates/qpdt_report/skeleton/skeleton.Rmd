@@ -100,6 +100,8 @@ The following table shows problems when parsing the pedigree input file.
 knitr::kable(l_dtp_check_result$DTypeProblems)
 ```
 
+In case the above table shows problems with parsing the given pedigree input file, then all subsequent R-code junks cannot be evaluated. 
+
 ```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
 cat("\n-->\n\n")
 ```
