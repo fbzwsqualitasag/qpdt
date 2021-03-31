@@ -25,6 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r parameter-settings, echo=FALSE}
+# parameter settings for current pedigree
 if (params$pedigreeType == 'gnm'){
   l_settings <- qpdt::get_gnm_prp_settings()  
 } else if (params$pedigreeType == 'argus'){
@@ -32,7 +33,13 @@ if (params$pedigreeType == 'gnm'){
 } else {
   l_settings <- qpdt::get_generic_settings()
 }
-
+# initialise variables that influence the inculsion of junks
+nr_sire_incon_bd <- 0
+nr_dam_incon_bd <- 0
+nr_sire_eqid <- 0
+nr_dam_eqid <- 0
+nr_sire_wrongsex <- 0
+nr_dam_wrongsex <- 0
 ```
 
 # Disclaimer
