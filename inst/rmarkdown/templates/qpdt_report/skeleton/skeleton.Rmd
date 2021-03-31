@@ -275,7 +275,7 @@ cat("\n -->\n\n")
 ```
 
 
-```{r latest-change, echo=FALSE, results='asis'}
+```{r latest-change, eval=TRUE, echo=FALSE, results='asis'}
 cat("\n\n---\n", "_Latest Changes: ", format(Sys.time(), format = "%Y-%m-%d %H:%M:%S"), " (", Sys.info()[['user']], ")_")
 ```
 
