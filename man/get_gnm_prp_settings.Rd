@@ -14,6 +14,9 @@ get_gnm_prp_settings(
   ps_introg_col = "introg",
   ps_inb_col = "inb_gen",
   ps_cryo_col = "cryo",
+  pn_id_col = 1,
+  pn_sire_col = 2,
+  pn_dam_col = 3,
   ps_col_delim = "|",
   pl_dtype = list(col = c("#animal", "sire", "dam", "birth_date", "sex", "plz",
     "introg", "inb_gen", "cryo"), dtp = c("integer", "integer", "integer", "date",
@@ -38,6 +41,12 @@ get_gnm_prp_settings(
 \item{ps_inb_col}{column header for inbreeding}
 
 \item{ps_cryo_col}{column header for cryo conservation}
+
+\item{pn_id_col}{column index for id in pedigree}
+
+\item{pn_sire_col}{column index for sire in pedigree}
+
+\item{pn_dam_col}{column index for dam in pedigree}
 
 \item{ps_col_delim}{column delimiter}
 
