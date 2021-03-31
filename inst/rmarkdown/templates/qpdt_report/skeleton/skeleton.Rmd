@@ -107,15 +107,17 @@ The following table shows problems when parsing the pedigree input file.
 knitr::kable(l_dtp_check_result$DTypeProblems)
 ```
 
-In case the above table shows problems with parsing the given pedigree input file, then all subsequent R-code junks cannot be evaluated. 
+## Note
+In case the above table shows problems with parsing the given pedigree input file, then all subsequent R-code junks cannot be evaluated and the ouput of the rest of the report is suppressed. To see the remainer of the report, the parsing problems must be fixed first.  
 
 ```{r, echo=FALSE, include=(n_nr_parse_problem == 0)}
 cat("\n-->\n\n")
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, include=(n_nr_parse_problem == 0)}
 # in case where parse problems were found, the following junks can no longer be evaluated
 knitr::opts_chunk$set(eval = (n_nr_parse_problem == 0))
+cat('\n<!--\n\n')
 ```
 
 
@@ -265,6 +267,10 @@ knitr::kable(l_parent_result$TblDamWrongSex)
 ```
 
 ```{r, echo=FALSE, results='asis', include=(nr_dam_wrongsex == 0)}
+cat("\n-->\n\n")
+```
+
+```{r, eval=TRUE, echo=FALSE, include=(n_nr_parse_problem == 0)}
 cat("\n-->\n\n")
 ```
 
