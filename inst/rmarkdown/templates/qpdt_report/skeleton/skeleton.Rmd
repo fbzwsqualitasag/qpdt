@@ -19,8 +19,8 @@ params:
     value: ""
   checkLoop:
     label: "Check for Pedigree Loops"
-    value: FALSE
-    choices: [TRUE, FALSE]  
+    value: "no"
+    choices: ["yes", "no"]  
 ---
 
 
@@ -293,7 +293,7 @@ knitr::kable(l_parent_result$TblDamWrongSex)
 cat("\n-->\n\n")
 ```
 
-```{r, echo=FALSE, results='asis', include=!params$checkLoop}
+```{r, echo=FALSE, results='asis', include=(params$checkLoop == 'no')}
 # inclusion of loop checks
 cat("\n<!--\n")
 ```
@@ -320,7 +320,7 @@ knitr::kable(tbl_loop_result)
 knitr::kable(l_loop_check_result$TblCycle)
 ```
 
-```{r, echo=FALSE, results='asis', include=!params$checkLoop}
+```{r, echo=FALSE, results='asis', include=(params$checkLoop == 'no')}
 cat("\n -->\n\n")
 ```
 
