@@ -48,7 +48,8 @@ create_pedigree_report <- function(ps_pedigree_path,
                     params = list(pedigreePath = ps_pedigree_path,
                                   pedigreeName = pl_params$pedigreeName,
                                   pedigreeType = pl_params$pedigreeType,
-                                  reportAuthor = pl_params$reportAuthor))
+                                  reportAuthor = pl_params$reportAuthor,
+                                  checkLoop    = pl_params$checkLoop))
 
 
   return(invisible(TRUE))
