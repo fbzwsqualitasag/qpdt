@@ -45,8 +45,10 @@ nr_sire_eqid <- 0
 nr_dam_eqid <- 0
 nr_sire_wrongsex <- 0
 nr_dam_wrongsex <- 0
-# loop check result
-l_loop_check_result <- NULL
+# initialise loop check result
+l_loop_check_result <- list(PedFile = params$pedigreePath,
+                            HasCycle = NA,
+                            TblCycle = NULL)
 
 # check computation required for the summary table
 # ID - check
