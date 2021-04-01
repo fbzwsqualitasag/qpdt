@@ -74,7 +74,7 @@ function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qpdt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -145,8 +145,9 @@ function.</p>
     <pre class="usage"><span class='fu'>create_pedigree_report</span>(
   <span class='no'>ps_pedigree_path</span>,
   <span class='kw'>ps_report_outdir</span> <span class='kw'>=</span> <span class='st'>"."</span>,
-  <span class='kw'>ps_report_rmd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>(), <span class='st'>"%Y%m%d%H%M%S"</span>),
-    <span class='st'>"_qpdt_pedigree_report.Rmd"</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>""</span>),
+  <span class='kw'>ps_report_rmd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>(), <span class='st'>"%Y%m%d%H%M%S"</span>), <span class='st'>"_"</span>,
+    <span class='kw pkg'>fs</span><span class='kw ns'>::</span><span class='fu'><a href='http://fs.r-lib.org/reference/path_file.html'>path_ext_remove</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/basename.html'>basename</a></span>(<span class='no'>ps_pedigree_path</span>)), <span class='st'>"_qpdt_pedigree_report.Rmd"</span>,
+    <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>""</span>),
   <span class='kw'>pl_params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 

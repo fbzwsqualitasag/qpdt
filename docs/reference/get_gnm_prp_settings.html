@@ -73,7 +73,7 @@ returned in a list" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">qpdt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -150,7 +150,13 @@ returned in a list</p>
   <span class='kw'>ps_introg_col</span> <span class='kw'>=</span> <span class='st'>"introg"</span>,
   <span class='kw'>ps_inb_col</span> <span class='kw'>=</span> <span class='st'>"inb_gen"</span>,
   <span class='kw'>ps_cryo_col</span> <span class='kw'>=</span> <span class='st'>"cryo"</span>,
-  <span class='kw'>ps_col_delim</span> <span class='kw'>=</span> <span class='st'>"|"</span>
+  <span class='kw'>pn_id_col</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>pn_sire_col</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>pn_dam_col</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>ps_col_delim</span> <span class='kw'>=</span> <span class='st'>"|"</span>,
+  <span class='kw'>pl_dtype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#animal"</span>, <span class='st'>"sire"</span>, <span class='st'>"dam"</span>, <span class='st'>"birth_date"</span>, <span class='st'>"sex"</span>, <span class='st'>"plz"</span>,
+    <span class='st'>"introg"</span>, <span class='st'>"inb_gen"</span>, <span class='st'>"cryo"</span>), <span class='kw'>dtp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"integer"</span>, <span class='st'>"integer"</span>, <span class='st'>"integer"</span>, <span class='st'>"date"</span>,
+    <span class='st'>"character"</span>, <span class='st'>"integer"</span>, <span class='st'>"double"</span>, <span class='st'>"logical"</span>, <span class='st'>"logical"</span>))
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -193,8 +199,24 @@ returned in a list</p>
       <td><p>column header for cryo conservation</p></td>
     </tr>
     <tr>
+      <th>pn_id_col</th>
+      <td><p>column index for id in pedigree</p></td>
+    </tr>
+    <tr>
+      <th>pn_sire_col</th>
+      <td><p>column index for sire in pedigree</p></td>
+    </tr>
+    <tr>
+      <th>pn_dam_col</th>
+      <td><p>column index for dam in pedigree</p></td>
+    </tr>
+    <tr>
       <th>ps_col_delim</th>
       <td><p>column delimiter</p></td>
+    </tr>
+    <tr>
+      <th>pl_dtype</th>
+      <td><p>list with datatypes</p></td>
     </tr>
     </table>
 

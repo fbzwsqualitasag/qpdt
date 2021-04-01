@@ -37,19 +37,19 @@ devtools::install_github("fbzwsqualitasag/qpdt")
 
 This is a basic example which shows you how basic properties of a pedigree can be checked:
 
-```{r example}
+```{r example, message=FALSE, warning=FALSE}
 library(qpdt)
 ## basic example code
 s_pedigree <- system.file('extdata',
                           'PopReport_SN_ohne_20210115.csv_adaptfin2.csv',
-                          package = 'qprppedigree')
+                          package = 'qpdt')
 check_pedig_parent(ps_pedig_path = s_pedigree)
 ```
 
 If you want to find whether a certain pedigree contains cycles the following statements provides an anser.
 
-```{r cycle-check}
-s_pedi_path <- system.file('extdata','data_sample2.csv', package = 'qprppedigree')
+```{r cycle-check, message=FALSE, warning=FALSE}
+s_pedi_path <- system.file('extdata','data_sample_cycle.csv', package = 'qpdt')
 check_cycle_pedigree(ps_pedig_path = s_pedi_path)
 ```
 

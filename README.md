@@ -32,24 +32,10 @@ library(qpdt)
 ## basic example code
 s_pedigree <- system.file('extdata',
                           'PopReport_SN_ohne_20210115.csv_adaptfin2.csv',
-                          package = 'qprppedigree')
+                          package = 'qpdt')
 check_pedig_parent(ps_pedig_path = s_pedigree)
-#> Warning: `guess_max` is a very large value, setting to `21474836` to avoid
-#> exhausting memory
-#> Parsed with column specification:
-#> cols(
-#>   `#IDTier` = col_double(),
-#>   IDVater = col_double(),
-#>   IDMutter = col_double(),
-#>   Birthdate = col_date(format = ""),
-#>   Geschlecht = col_character(),
-#>   PLZ = col_double(),
-#>   introg = col_double(),
-#>   inb_gen = col_logical(),
-#>   cryo = col_double()
-#> )
 #> $PedFile
-#> [1] "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/qprppedigree/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/qpdt/extdata/PopReport_SN_ohne_20210115.csv_adaptfin2.csv"
 #> 
 #> $NrMissingSire
 #> [1] 1211
@@ -113,27 +99,15 @@ If you want to find whether a certain pedigree contains cycles the
 following statements provides an anser.
 
 ``` r
-s_pedi_path <- system.file('extdata','data_sample2.csv', package = 'qprppedigree')
+s_pedi_path <- system.file('extdata','data_sample_cycle.csv', package = 'qpdt')
 check_cycle_pedigree(ps_pedig_path = s_pedi_path)
-#> Parsed with column specification:
-#> cols(
-#>   `#animal` = col_double(),
-#>   sire = col_double(),
-#>   dam = col_double(),
-#>   birth_date = col_date(format = ""),
-#>   sex = col_character(),
-#>   plz = col_double(),
-#>   introg = col_double(),
-#>   inb_gen = col_logical(),
-#>   cryo = col_logical()
-#> )
 #> $PedFile
-#> [1] "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/qprppedigree/extdata/data_sample2.csv"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.0/Resources/library/qpdt/extdata/data_sample_cycle.csv"
 #> 
 #> $HasCycle
-#> [1] FALSE
+#> [1] TRUE
 ```
 
 ------------------------------------------------------------------------
 
-*Latest Changes: 2021-03-26 09:27:55 (pvr)*
+*Latest Changes: 2021-04-01 08:24:00 (pvr)*
