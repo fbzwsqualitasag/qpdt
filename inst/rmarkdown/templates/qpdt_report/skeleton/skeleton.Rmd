@@ -337,9 +337,9 @@ tbl_loop_result <- tibble::tibble(Pedigree = c('Input File',
 knitr::kable(tbl_loop_result)
 ```
 
-`r if(exists("l_loop_check_result") && l_loop_check_result$HasCycle){"The pedigree contains loops. The animals that constitute the loop are shown in the table below."}else{"The pedigree does not contain any loops."}`
+`r if(is.na(l_loop_check_result$HasCycle)){"The pedigree could not be checked for loops."} else{ if(l_loop_check_result$HasCycle){"The pedigree contains loops. The animals that constitute the loop are shown in the table below."}else{"The pedigree does not contain any loops."}}`
 
-```{r cycle-table, eval=(params$checkLoop == 'yes'), echo=FALSE, results='asis', include=exists("l_loop_check_result") && l_loop_check_result$HasCycle}
+```{r cycle-table, eval=(params$checkLoop == 'yes'), echo=FALSE, results='asis', include=(!is.na(l_loop_check_result$HasCycle) && l_loop_check_result$HasCycle)}
 knitr::kable(l_loop_check_result$TblCycle)
 ```
 
