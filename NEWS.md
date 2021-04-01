@@ -1,5 +1,6 @@
-# qpdt (development version)
+# qpdt 0.0.1
 
+* Released first version of reporting feature
 * Adding check for wrong sex of parents
 
 # qpdt 0.0.0.9000
